@@ -1,0 +1,169 @@
+@font-face {
+    font-family: 'Roboto-Regular';
+    src: url('../fonts/Roboto-Regular.ttf');
+}
+
+html, body {
+    font-family: 'Roboto-Regular';
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #3c4556;
+    color: white;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    margin-top: 5%;
+}
+
+.test-border {
+    border: 2px solid green;
+}
+
+/* measures */
+
+.small-margin-top {
+    margin-top: 3%;
+}
+
+.small-width {
+    width: 80%;
+}
+
+.middle-width {
+    width: 50%;
+}
+
+.small-padding {
+    padding: 5%;
+}
+
+.large-width {
+    width: 100%;
+}
+
+.large-hight {
+    height: 100vh;
+}
+
+.small-text {
+    font-size: 100%;
+}
+
+/* forms */
+
+.form-input {
+    color: #333;
+    font-size: 90%;
+    margin-bottom: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.3rem;
+    border-radius: 0.2rem;
+    background-color: rgb(255, 255, 255);
+    border: none;
+    width: 50%;
+    display: block;
+    border-bottom: 0.3rem solid transparent;
+    transition: all 0.3s;
+}
+
+.form-label {
+    font-size: 90%;
+    margin-bottom: 0.7rem;
+    display: block;
+    transition: all 0.3s;
+    transform: translateY(0rem);
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+.form-button {
+    border: 2px solid #52c858;
+    border-radius: 0.2rem;
+    padding: 00.5rem;
+    transition: 1s;
+    width: 100%;
+}
+
+.form-button:hover {
+    background-color: #52c858;
+    transition: 1s;
+}
+
+/* containers */
+
+.front-background {
+    background-image: url('../front.jpg');
+}
+
+.box {
+    background-color: #2e4053;
+    border-radius: 20px;
+    border-left: 7px solid #52c858;
+    padding: 16px;
+    transition: 1s;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.box:hover {
+    border-left: 7px solid #d90a0a;
+    transition: 1s;
+}
+
+.box-2 {
+    background-color: #2e4053;
+    border-radius: 20px;
+    border-left: 7px solid #f4d03f;
+    padding: 16px;
+    transition: 1s;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.box-2:hover {
+    border-left: 7px solid #961cb7;
+    transition: 1s;
+}
+
+/* aligns */
+
+.text-center {
+    text-align: center;
+}
+
+.content-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* colors */
+
+.green-border {
+    border-right: 2px solid #52c858;
+}
+
+.dark-background {
+    background-color: #2e4053;
+}
+
+.white-text {
+    color: white;
+}
+
+/* Grid */
+
+.row {
+    display: grid;
+    grid-template-columns: 30% auto
+}
+
+.row-2 {
+    display: grid;
+    grid-template-columns: 50% auto;
+}
