@@ -1,0 +1,72 @@
+@page "/employees"
+
+<div class="row">
+    <Nav></Nav>
+    <div class="test-border">
+        <h2 class="text-center">Register Employee</h2>
+        <EditForm Model="employee" OnValidSubmit="HandleValidSubmit">
+            <div class="box-2 row-2 small-width">
+                <div>
+                    <div>
+                        <label for="name" class="form-label">Name</label>
+                        <InputText type="text" placeholder="name" class="form-input" id="name" @bind-Value="employee.Name" />
+                    </div>
+                    <div>
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <InputText type="text" placeholder="last name" class="form-input" id="lastName" @bind-Value="employee.LastName" />
+                    </div>
+                    <div>
+                        <label for="gender" class="form-label">Gender</label>
+                        <InputSelect @bind-Value="employee.Gender" id="gender" class="form-input">
+                            <option value="Not Specified">Not Specified</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </InputSelect>
+                    </div>
+                    <div>
+                        <label for="phoneNumber" class="form-label">Phone Number</label>
+                        <InputText type="text" placeholder="phone number" class="form-input" id="phoneNumber" @bind-Value="employee.PhoneNumber" />
+                    </div>
+                    <div>
+                        <label for="birthdate" class="form-label">Birthdate</label>
+                        <InputText type="text" placeholder="birthdate" class="form-input" id="birthdate" @bind-Value="employee.Birthdate" />
+                    </div>
+                    <div class="content-center middle-width">
+                        <button type="submit" class="form-button dark-background white-text">Submit</button>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <label for="municipality" class="form-label">Municipality</label>
+                        <InputText type="text" placeholder="municipality" class="form-input" id="municipality" @bind-Value="employee.Municipality" />
+                    </div>
+                    <div>
+                        <label for="postalCode" class="form-label">Postal Code</label>
+                        <InputText type="text" placeholder="postal code" class="form-input" id="postalCode" @bind-Value="employee.PostalCode" />
+                    </div>
+                    <div>
+                        <label for="street" class="form-label">Street</label>
+                        <InputText type="text" placeholder="street" class="form-input" id="street" @bind-Value="employee.Street" />
+                    </div>
+                    <div>
+                        <label for="colony" class="form-label">Colony</label>
+                        <InputText type="text" placeholder="colony" class="form-input" id="colony" @bind-Value="employee.Colony" />
+                    </div>
+                    <div>
+                        <label for="number" class="form-label">Number</label>
+                        <InputText type="text" placeholder="number" class="form-input" id="number" @bind-Value="employee.Number" />
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private Employee employee = new Employee();
+
+    private void HandleValidSubmit()
+    {
+
+    }
+}
