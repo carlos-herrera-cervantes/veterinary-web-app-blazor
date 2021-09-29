@@ -1,6 +1,6 @@
 @page "/"
 @inject IAuthService authService
-@inject ILogger<Auth> Logger
+@inject NavigationManager navigationManager
 
 <div class="row">
     <div class="large-hight">
@@ -9,11 +9,13 @@
             <div class="box small-width">
                 <div>
                     <label for="employee_number" class="form-label">Employee Number</label>
-                    <InputText type="text" placeholder="5513909810" class="form-input" id="employee_number" @bind-Value="credentials.EmployeeNumber" />
+                    <InputText type="text" placeholder="5513909810" class="form-input" id="employee_number"
+                        @bind-Value="credentials.EmployeeNumber" />
                 </div>
                 <div>
                     <label for="password" class="form-label">Password</label>
-                    <InputText type="password" placeholder="secret" class="form-input" id="password" @bind-Value="credentials.Password" />
+                    <InputText type="password" placeholder="secret" class="form-input" id="password"
+                        @bind-Value="credentials.Password" />
                 </div>
                 <div class="content-center middle-width">
                     <button type="submit" class="form-button dark-background white-text">Submit</button>
@@ -32,15 +34,15 @@
 </div>
 
 @code {
-    private Credentials credentials = new Credentials();    
+    private Credentials credentials = new Credentials();
 
     private async Task HandleSignIn()
     {
-        Logger.LogInformation("EXECUTED METHOD");
-        Logger.LogInformation(credentials.EmployeeNumber);
-        Logger.LogInformation(credentials.Password);
+        var result = await authService.SignInAsync(credentials);
 
-        var accessToken = await authService.SignInAsync(credentials);
-        Logger.LogInformation($"ACCESS TOKEN: ", accessToken);
+        if (result != null)
+        {
+            navigationManager.NavigateTo("/index");
+        }
     }
 }
