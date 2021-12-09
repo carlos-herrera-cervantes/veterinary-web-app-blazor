@@ -5,6 +5,8 @@ namespace Veterinary.Services.AuthServices
 {
     public interface IAuthService
     {
-        Task<string> SignInAsync(Credentials credentials);
+        Task<AuthResponseDto> SignInAsync(Credentials credentials);
+
+        Task SignOutAsync();
     }
 }

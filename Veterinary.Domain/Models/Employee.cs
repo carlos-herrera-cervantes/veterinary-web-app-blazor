@@ -2,6 +2,8 @@ namespace Veterinary.Domain.Models
 {
     public class Employee
     {
+        public string Id { get; set; }
+
         public string Name { get; set; }
 
         public string LastName { get; set; }
@@ -21,5 +23,7 @@ namespace Veterinary.Domain.Models
         public string Colony { get; set; }
 
         public string Number { get; set; }
+
+        public string[] Roles { get; set; }
     }
 }

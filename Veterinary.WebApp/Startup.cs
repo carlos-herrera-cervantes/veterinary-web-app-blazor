@@ -1,8 +1,12 @@
+using System;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Veterinary.Services.AuthServices;
+using Veterinary.Services.EmployeeServices;
 
 namespace Veterinary.WebApp
 {
@@ -12,7 +16,14 @@ namespace Veterinary.WebApp
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddTransient<IAuthService, AuthService>();
+            services.AddBlazoredLocalStorage();
+            services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>();
+            services.AddAuthorizationCore();
+            services.AddHttpClient<IAuthService, AuthService>(c =>
+            {
+                c.BaseAddress = new Uri("http://localhost:3000/api/v1/");
+            });
+            services.AddTransient<IEmployeeService, EmployeeService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

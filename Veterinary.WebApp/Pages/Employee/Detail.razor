@@ -1,11 +1,12 @@
-@page "/employee"
+@page "/employees/{id}"
 @inject IEmployeeService employeeService
+@inject ILogger<Detail> logger
 
 <Header></Header>
 <div class="row">
     <Nav></Nav>
     <div>
-        <h2 class="text-center">Register Employee</h2>
+        <h2 class="text-center">Detail</h2>
         <EditForm Model="employee" OnValidSubmit="HandleValidSubmit">
             <div class="box-2 row-2 small-width">
                 <div>
@@ -65,10 +66,20 @@
 </div>
 
 @code {
-    private Employee employee = new Employee();
+    private Employee employee;
+
+    [Parameter]
+    public string Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        logger.LogInformation($"ID: {Id}");
+        employee = await employeeService.GetByIdAsync(Id);
+        await base.OnInitializedAsync();
+    }
 
     private async Task HandleValidSubmit()
     {
-        await employeeService.CreateAsync(employee);
+        await employeeService.UpdateByIdAsync(Id, employee);
     }
 }
