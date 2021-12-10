@@ -69,6 +69,22 @@ a {
     display: block;
     border-bottom: 0.3rem solid transparent;
     transition: all 0.3s;
+    outline: none;
+}
+
+.form-input-small {
+    color: #333;
+    font-size: 90%;
+    margin-bottom: 5%;
+    padding: 0.3rem;
+    border-radius: 0.2rem;
+    background-color: rgb(255, 255, 255);
+    border: none;
+    width: 45%;
+    display: inline;
+    border-bottom: 0.3rem solid transparent;
+    transition: all 0.3s;
+    outline: none;
 }
 
 .form-label {
@@ -221,6 +237,10 @@ a {
 
 .text-center {
     text-align: center;
+}
+
+.text-left {
+    text-align: left;
 }
 
 .content-center {

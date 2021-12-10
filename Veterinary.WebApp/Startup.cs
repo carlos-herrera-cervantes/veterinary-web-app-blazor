@@ -19,10 +19,11 @@ namespace Veterinary.WebApp
             services.AddBlazoredLocalStorage();
             services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>();
             services.AddAuthorizationCore();
-            services.AddHttpClient<IAuthService, AuthService>(c =>
+            services.AddHttpClient("veterinary", c =>
             {
                 c.BaseAddress = new Uri("http://localhost:3000/api/v1/");
             });
+            services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IEmployeeService, EmployeeService>();
         }
 

@@ -1,82 +1,115 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
+using Blazored.LocalStorage;
+using Newtonsoft.Json;
 using Veterinary.Domain.Models;
 
 namespace Veterinary.Services.EmployeeServices
 {
     public class EmployeeService : IEmployeeService
     {
-        private IEnumerable<Employee> _employees = new List<Employee>
+        #region snippet_Properties
+
+        private readonly HttpClient _httpClient;
+
+        private readonly ILocalStorageService _localStorage;
+
+        #endregion
+
+        #region snippet_Constructors
+
+        public EmployeeService(IHttpClientFactory clientFactory, ILocalStorageService localStorage)
         {
-            new Employee
-            {
-                Name = "Carlos",
-                LastName = "Herrera",
-                Gender = "Male",
-                PhoneNumber = "5215513909810",
-                Birthdate = "1994-11-08",
-                Municipality = "Acapulco",
-                PostalCode = "39550",
-                Street = "2",
-                Colony = "Bella Vista",
-                Number = "25"
-            },
-            new Employee
-            {
-                Name = "Isela",
-                LastName = "Ortíz",
-                Gender = "Female",
-                PhoneNumber = "5217441467274",
-                Birthdate = "2000-11-19",
-                Municipality = "Acapulco",
-                PostalCode = "39550",
-                Street = "5",
-                Colony = "Bella Vista",
-                Number = "78"
-            },
-            new Employee
-            {
-                Name = "Teresa",
-                LastName = "Herrera",
-                Gender = "Female",
-                PhoneNumber = "5217444767174",
-                Birthdate = "1995-04-24",
-                Municipality = "Acapulco",
-                PostalCode = "39550",
-                Street = "150",
-                Colony = "Pedregoso",
-                Number = "108"
-            }
-        };
-
-        public async Task<IEnumerable<Employee>> GetAllAsync()
-            => await Task.FromResult(_employees);
-
-        public async Task<Employee> GetByIdAsync(string id)
-            => await Task.FromResult(_employees.Where(e => e.Name == id).FirstOrDefault());
-
-        public async Task<Employee> CreateAsync(Employee employee)
-        {
-            await Task.FromResult(_employees.Append(employee));
-            return employee;
+            _httpClient = clientFactory.CreateClient("veterinary");
+            _localStorage = localStorage;
         }
 
-        public async Task<Employee> UpdateByIdAsync(string id, Employee employee)
+        #endregion
+
+        #region snippet_ActionMethods
+
+        /// <summary>Returns an enumerable of employees</summary>
+        /// <returns>Enumerable of employees</returns>
+        public async Task<ListEmployeeResponseDto> GetAllAsync()
         {
-            await Task.FromResult(_employees.Append(employee));
-            return employee;
+            var jwt = await _localStorage.GetItemAsync<string>("jwt");
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+            using var httpResponse = await _httpClient.GetAsync("employees");
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
+            
+            return JsonConvert.DeserializeObject<ListEmployeeResponseDto>(content);
         }
 
+        /// <summary>Returns a employee by its ID</summary>
+        /// <param name="id">Employee ID</param>
+        /// <returns>SingleEmployeeResponseDto</returns>
+        public async Task<SingleEmployeeResponseDto> GetByIdAsync(string id)
+        {
+            var jwt = await _localStorage.GetItemAsync<string>("jwt");
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+            using var httpResponse = await _httpClient.GetAsync($"employees/{id}");
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<SingleEmployeeResponseDto>(content);
+        }
+
+        /// <summary>Register a new employee</summary>
+        /// <param name="employee">Employee object</param>
+        /// <returns>SingleEmployeeResponseDto</returns>
+        public async Task<SingleEmployeeResponseDto> CreateAsync(Employee employee)
+        {
+            var employeeJson = new StringContent
+            (
+                JsonConvert.SerializeObject(employee), Encoding.UTF8, "application/json"
+            );
+
+            var jwt = await _localStorage.GetItemAsync<string>("jwt");
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+            using var httpResponse = await _httpClient.PostAsync("employees", employeeJson);
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<SingleEmployeeResponseDto>(content);
+        }
+
+        /// <summary>Updates partially an employee</summary>
+        /// <param name="id">Employee ID</param>
+        /// <param name="employee">Employee object</param>
+        /// <returns>SingleEmployeeResponseDto</returns>
+        public async Task<SingleEmployeeResponseDto> UpdateByIdAsync(string id, Employee employee)
+        {
+            var employeeJson = new StringContent
+            (
+                JsonConvert.SerializeObject(employee), Encoding.UTF8, "application/json"
+            );
+
+            var jwt = await _localStorage.GetItemAsync<string>("jwt");
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+            using var httpResponse = await _httpClient.PatchAsync($"employees/{id}", employeeJson);
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<SingleEmployeeResponseDto>(content);
+        }
+
+        /// <summary>Deletes an employee</summary>
+        /// <param name="id">Employee ID</param>
         public async Task DeleteByIdAsync(string id)
         {
-            _employees = await Task.FromResult(_employees.Where(e => e.Name != id));
+            var jwt = await _localStorage.GetItemAsync<string>("jwt");
 
-            foreach (var employee in _employees)
-            {
-                Console.WriteLine(employee.Name);
-            }
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+            using var httpResponse = await _httpClient.DeleteAsync($"employees/{id}");
         }
+
+        #endregion
     }
 }

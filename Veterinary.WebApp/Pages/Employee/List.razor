@@ -1,6 +1,6 @@
 @page "/employees"
+@attribute [Authorize]
 @inject IEmployeeService employeeService
-@inject ILogger<List> logger
 
 <Header></Header>
 <div class="row">
@@ -8,42 +8,53 @@
     <div>
         <h2 class="text-center">Employees</h2>
         <div class="box-2 small-width">
-            <table class="fl-table">
-                <thead>
-                    <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Gender</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (employees.Count() == 0)
-                    {
+            @if (employees is null)
+            {
+                <p><em>Loading....</em></p>
+            }
+            else
+            {
+                <table class="fl-table">
+                    <thead>
                         <tr>
-                            <td colspan="3">No data</td>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Gender</th>
                         </tr>
-                    }
-                    else
-                    {
-                        foreach (var employee in employees)
+                    </thead>
+                    <tbody>
+                        @if (employees.Data.Count() == 0)
                         {
                             <tr>
-                                <td>@employee.Name</td>
-                                <td>@employee.LastName</td>
-                                <td>@employee.Gender</td>
-                                <td><NavLink href="@($"/employees/{employee.Name}")"><i class="fa fa-info-circle"></i> Detail</NavLink></td>
-                                <td><button class="form-button-danger" @onclick="@(() => HandleDeleteAsync(employee.Name))"><i class="fa fa-minus-circle"></i> Delete</button></td>
+                                <td colspan="3">No data</td>
                             </tr>
                         }
-                    }
-                </tbody>
-            </table>
+                        else
+                        {
+                            foreach (var employee in employees.Data)
+                            {
+                                <tr>
+                                    <td>@employee.Name</td>
+                                    <td>@employee.LastName</td>
+                                    <td>@employee.Gender</td>
+                                    <td>
+                                        <NavLink href="@($"/employees/{employee.Id}")"><i class="fa fa-info-circle"></i> Detail
+                                        </NavLink>
+                                    </td>
+                                    <td><button class="form-button-danger" @onclick="@(() => HandleDeleteAsync(employee.Id))"><i
+                                    class="fa fa-minus-circle"></i> Delete</button></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            }
         </div>
     </div>
 </div>
 
 @code {
-    private IEnumerable<Employee> employees;
+    private ListEmployeeResponseDto employees;
 
     protected override async Task OnInitializedAsync()
     {
@@ -53,7 +64,7 @@
 
     private async Task HandleDeleteAsync(string id)
     {
-        logger.LogInformation($"ID: {id}");
         await employeeService.DeleteByIdAsync(id);
+        employees = await employeeService.GetAllAsync();
     }
 }
