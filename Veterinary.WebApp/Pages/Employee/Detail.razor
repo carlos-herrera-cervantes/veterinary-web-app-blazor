@@ -1,85 +1,145 @@
 @page "/employees/{id}"
 @inject IEmployeeService employeeService
-@inject ILogger<Detail> logger
+@inject NavigationManager navigationManager
 
 <Header></Header>
 <div class="row">
     <Nav></Nav>
     <div>
         <h2 class="text-center">Detail</h2>
-        <EditForm Model="employee" OnValidSubmit="HandleValidSubmit">
-            <div class="box-2 row-2 small-width">
-                <div>
+        @if (employee is null)
+        {
+            <p><em>Loading....</em></p>
+        }
+        else
+        {
+            <EditForm Model="employee" OnValidSubmit="HandleValidSubmit">
+                <div class="box-2 row-2 small-width">
                     <div>
-                        <label for="name" class="form-label">Name</label>
-                        <InputText type="text" placeholder="name" class="form-input" id="name" @bind-Value="employee.Name" />
+                        <div>
+                            <label for="name" class="form-label">Name</label>
+                            <InputText type="text" placeholder="name" class="form-input" id="name"
+                            @bind-Value="employee.Data.Name" />
+                        </div>
+                        <div>
+                            <label for="lastName" class="form-label">Last Name</label>
+                            <InputText type="text" placeholder="last name" class="form-input" id="lastName"
+                            @bind-Value="employee.Data.LastName" />
+                        </div>
+                        <div>
+                            <label for="gender" class="form-label">Gender</label>
+                            <InputSelect @bind-Value="employee.Data.Gender" id="gender" class="form-input">
+                                <option value="Not Specified">Not Specified</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </InputSelect>
+                        </div>
+                        <div>
+                            <label for="phoneNumber" class="form-label">Phone Number</label>
+                            <InputText type="text" placeholder="phone number" class="form-input" id="phoneNumber"
+                            @bind-Value="employee.Data.PhoneNumber" />
+                        </div>
+                        <div>
+                            <label for="birthdate" class="form-label">Birthdate</label>
+                            <InputText type="date" placeholder="birthdate" class="form-input" id="birthdate"
+                            @bind-Value="employee.Data.Birthdate" />
+                        </div>
+                        <div>
+                            <label for="roles" class="form-label">Roles</label>
+                            @foreach (var role in @roles)
+                            {
+                                var existsRole = @employee.Data.Roles.Where(r => r == role).FirstOrDefault();
+                                
+                                if (existsRole is null)
+                                {
+                                    <label class="form-label"><input type="checkbox" value="@role" @onchange="eventArgs => { OnCheckBox(role, eventArgs.Value); }" />@role</label>
+                                }
+                                else
+                                {
+                                    <label class="form-label"><input type="checkbox" checked value="@role" @onchange="eventArgs => { OnCheckBox(role, eventArgs.Value); }" />@role</label>
+                                }
+                            }
+                        </div>
+                        <div class="content-center middle-width">
+                            <button type="submit" class="form-button dark-background white-text">Submit</button>
+                        </div>
                     </div>
                     <div>
-                        <label for="lastName" class="form-label">Last Name</label>
-                        <InputText type="text" placeholder="last name" class="form-input" id="lastName" @bind-Value="employee.LastName" />
-                    </div>
-                    <div>
-                        <label for="gender" class="form-label">Gender</label>
-                        <InputSelect @bind-Value="employee.Gender" id="gender" class="form-input">
-                            <option value="Not Specified">Not Specified</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </InputSelect>
-                    </div>
-                    <div>
-                        <label for="phoneNumber" class="form-label">Phone Number</label>
-                        <InputText type="text" placeholder="phone number" class="form-input" id="phoneNumber" @bind-Value="employee.PhoneNumber" />
-                    </div>
-                    <div>
-                        <label for="birthdate" class="form-label">Birthdate</label>
-                        <InputText type="text" placeholder="birthdate" class="form-input" id="birthdate" @bind-Value="employee.Birthdate" />
-                    </div>
-                    <div class="content-center middle-width">
-                        <button type="submit" class="form-button dark-background white-text">Submit</button>
+                        <div>
+                            <label for="municipality" class="form-label">Municipality</label>
+                            <InputText type="text" placeholder="municipality" class="form-input" id="municipality"
+                            @bind-Value="employee.Data.Municipality" />
+                        </div>
+                        <div>
+                            <label for="postalCode" class="form-label">Postal Code</label>
+                            <InputText type="text" placeholder="postal code" class="form-input" id="postalCode"
+                            @bind-Value="employee.Data.PostalCode" />
+                        </div>
+                        <div>
+                            <label for="street" class="form-label">Street</label>
+                            <InputText type="text" placeholder="street" class="form-input" id="street"
+                            @bind-Value="employee.Data.Street" />
+                        </div>
+                        <div>
+                            <label for="colony" class="form-label">Colony</label>
+                            <InputText type="text" placeholder="colony" class="form-input" id="colony"
+                            @bind-Value="employee.Data.Colony" />
+                        </div>
+                        <div>
+                            <label for="number" class="form-label">Number</label>
+                            <InputText type="text" disabled placeholder="number" class="form-input" id="number"
+                            @bind-Value="employee.Data.Number" />
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <div>
-                        <label for="municipality" class="form-label">Municipality</label>
-                        <InputText type="text" placeholder="municipality" class="form-input" id="municipality" @bind-Value="employee.Municipality" />
-                    </div>
-                    <div>
-                        <label for="postalCode" class="form-label">Postal Code</label>
-                        <InputText type="text" placeholder="postal code" class="form-input" id="postalCode" @bind-Value="employee.PostalCode" />
-                    </div>
-                    <div>
-                        <label for="street" class="form-label">Street</label>
-                        <InputText type="text" placeholder="street" class="form-input" id="street" @bind-Value="employee.Street" />
-                    </div>
-                    <div>
-                        <label for="colony" class="form-label">Colony</label>
-                        <InputText type="text" placeholder="colony" class="form-input" id="colony" @bind-Value="employee.Colony" />
-                    </div>
-                    <div>
-                        <label for="number" class="form-label">Number</label>
-                        <InputText type="text" placeholder="number" class="form-input" id="number" @bind-Value="employee.Number" />
-                    </div>
-                </div>
-            </div>
-        </EditForm>
+            </EditForm>
+        }
     </div>
 </div>
 
 @code {
-    private Employee employee;
+    private SingleEmployeeResponseDto employee;
+
+    private IEnumerable<string> roles = new List<string>
+    {
+        "SuperAdmin",
+        "Employee"
+    };
 
     [Parameter]
     public string Id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        logger.LogInformation($"ID: {Id}");
         employee = await employeeService.GetByIdAsync(Id);
         await base.OnInitializedAsync();
     }
 
     private async Task HandleValidSubmit()
     {
-        await employeeService.UpdateByIdAsync(Id, employee);
+        var result = await employeeService.UpdateByIdAsync(Id, employee.Data);
+
+        if (result != null)
+        {
+            navigationManager.NavigateTo("/employees");
+        }
+    }
+
+    private void OnCheckBox(string role, object check)
+    {
+        if ((bool)check)
+        {
+            if (!employee.Data.Roles.Contains(role))
+            {
+                employee.Data.Roles.Add(role);
+            }
+        }
+        else
+        {
+            if (employee.Data.Roles.Contains(role))
+            {
+                employee.Data.Roles.Remove(role);
+            }
+        }
     }
 }

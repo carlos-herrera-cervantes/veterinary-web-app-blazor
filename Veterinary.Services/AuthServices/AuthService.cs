@@ -11,23 +11,33 @@ namespace Veterinary.Services.AuthServices
 {
     public class AuthService : IAuthService
     {
+        #region snippet_Properties
+
         private readonly HttpClient _httpClient;
 
         private readonly AuthenticationStateProvider _authenticationStateProvider;
         
         private readonly ILocalStorageService _localStorage;
 
+        #endregion
+
+        #region snippet_Constructors
+
         public AuthService
         (
-            HttpClient httpClient,
+            IHttpClientFactory clientFactory,
             AuthenticationStateProvider authenticationStateProvider,
             ILocalStorageService localStorage
         )
         {
-            _httpClient = httpClient;
+            _httpClient = clientFactory.CreateClient("veterinary");
             _authenticationStateProvider = authenticationStateProvider;
             _localStorage = localStorage;
         }
+
+        #endregion
+
+        #region snippet_ActionMethods
 
         /// <summary>
         /// Authenticates an employee
@@ -55,8 +65,6 @@ namespace Veterinary.Services.AuthServices
             ((JwtAuthenticationStateProvider)_authenticationStateProvider)
                 .MarkUserAsAuthenticated(credentials.EmployeeNumber);
 
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", authResponse.Data);
-
             return authResponse;
         }
 
@@ -65,9 +73,15 @@ namespace Veterinary.Services.AuthServices
         /// </summary>
         public async Task SignOutAsync()
         {
+            var jwt = await _localStorage.GetItemAsync<string>("jwt");
+
             await _localStorage.RemoveItemAsync("jwt");
             ((JwtAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
-            _httpClient.DefaultRequestHeaders.Authorization = null;
+            
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+            using var httpResponse = await _httpClient.PostAsync("auth/sign-out", null);
         }
+
+        #endregion
     }
 }
