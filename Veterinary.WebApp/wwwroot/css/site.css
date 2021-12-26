@@ -109,7 +109,7 @@ a {
 }
 
 .form-button {
-    border: 2px solid #52c858;
+    border: 2px solid #F0B27A;
     border-radius: 0.2rem;
     padding: 00.5rem;
     transition: 1s;
@@ -127,7 +127,7 @@ a {
 }
 
 .form-button:hover {
-    background-color: #52c858;
+    background-color: #F0B27A;
     transition: 1s;
 }
 
@@ -148,13 +148,8 @@ a {
     margin-right: 10%;
     margin-left: 15%;
     margin-bottom: 10%;
-    border-bottom: 10px solid #16A085;
+    border-bottom: 7px solid #F0B27A;
     padding-bottom: 5%;
-    transition: 1s;
-}
-
-.navigation a:hover {
-    border-bottom: 10px solid #F39C12;
     transition: 1s;
 }
 
@@ -165,31 +160,21 @@ a {
 .box {
     background-color: #2e4053;
     border-radius: 20px;
-    border-left: 7px solid #52c858;
+    border-left: 7px solid #F0B27A;
     padding: 16px;
     transition: 1s;
     margin-left: auto;
     margin-right: auto;
-}
-
-.box:hover {
-    border-left: 7px solid #d90a0a;
-    transition: 1s;
 }
 
 .box-2 {
     background-color: #2e4053;
     border-radius: 20px;
-    border-left: 7px solid #f4d03f;
+    border-left: 7px solid #F0B27A;
     padding: 16px;
     transition: 1s;
     margin-left: auto;
     margin-right: auto;
-}
-
-.box-2:hover {
-    border-left: 7px solid #961cb7;
-    transition: 1s;
 }
 
 .header {
@@ -259,7 +244,7 @@ a {
 }
 
 .green-background {
-    background-color: #16A085;
+    background-color: #F0B27A;
 }
 
 .white-text {
@@ -294,11 +279,6 @@ a {
     }
 
     .navigation a {
-        border-bottom: 5px solid #16A085;
-    }
-
-    .navigation a:hover {
-        border-bottom: 5px solid #F39C12;
-        transition: 1s;
+        border-bottom: 5px solid #F0B27A;
     }
 }
