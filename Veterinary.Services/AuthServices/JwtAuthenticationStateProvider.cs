@@ -11,10 +11,20 @@ namespace Veterinary.Services.AuthServices
 {
     public class JwtAuthenticationStateProvider : AuthenticationStateProvider
     {
+        #region snippet_Properties
+
         private readonly ILocalStorageService _localStorage;
+
+        #endregion
+
+        #region snippet_Constructors
 
         public JwtAuthenticationStateProvider(ILocalStorageService localStorage)
             => _localStorage = localStorage;
+
+        #endregion
+
+        #region snippet_ActionMethods
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
@@ -31,12 +41,10 @@ namespace Veterinary.Services.AuthServices
             ));
         }
 
+        #endregion
+
         #region snippet_Helpers
 
-        /// <summary>
-        /// Mark a user as authenticated user
-        /// </summary>
-        /// <param name="employeeNumber">Employee number</param>
         public void MarkUserAsAuthenticated(string employeeNumber)
         {
             var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(new[]
@@ -48,9 +56,6 @@ namespace Veterinary.Services.AuthServices
             NotifyAuthenticationStateChanged(authState);
         }
 
-        /// <summary>
-        /// Mark a user as unauthenticated
-        /// </summary>
         public void MarkUserAsLoggedOut()
         {
             var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
@@ -58,11 +63,6 @@ namespace Veterinary.Services.AuthServices
             NotifyAuthenticationStateChanged(authState);
         }
 
-        /// <summary>
-        /// Extract the values of claims from Json Web Token
-        /// </summary>
-        /// <param name="jwtToken">Json Web Token</param>
-        /// <returns>IEnumerable of claims</returns>
         private IEnumerable<Claim> ParseClaimsFromJwt(string jwtToken)
         {
             var claims = new List<Claim>();
@@ -96,11 +96,6 @@ namespace Veterinary.Services.AuthServices
             return claims;
         }
 
-        /// <summary>
-        /// Decompose the base 64 string
-        /// </summary>
-        /// <param name="base64">Base 64 string</param>
-        /// <returns>Array of bytes</returns>
         private byte[] ParseBase64WithoutPadding(string base64)
         {
             switch (base64.Length % 4)

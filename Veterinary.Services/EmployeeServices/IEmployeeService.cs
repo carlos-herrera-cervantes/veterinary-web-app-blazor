@@ -1,18 +1,15 @@
 using System.Threading.Tasks;
 using Veterinary.Domain.Models;
+using Veterinary.Domain.Types;
 
 namespace Veterinary.Services.EmployeeServices
 {
     public interface IEmployeeService
     {
-         Task<ListEmployeeResponseDto> GetAllAsync();
+         Task<HttpListResponse<EmployeeProfile>> GetAllAsync(int offset, int limit);
 
-         Task<SingleEmployeeResponseDto> GetByIdAsync(string id);
+         Task<EmployeeProfile> GetByIdAsync(string id);
 
-         Task<SingleEmployeeResponseDto> CreateAsync(Employee employee);
-
-         Task<SingleEmployeeResponseDto> UpdateByIdAsync(string id, Employee employee);
-
-         Task DeleteByIdAsync(string id);
+         Task<EmployeeProfile> UpdateByIdAsync(EmployeeProfile employeeProfile);
     }
 }

@@ -3,8 +3,10 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Veterinary.Domain.Models;
+using Veterinary.Domain.Types;
 
 namespace Veterinary.Services.EmployeeServices
 {
@@ -16,53 +18,53 @@ namespace Veterinary.Services.EmployeeServices
 
         private readonly ILocalStorageService _localStorage;
 
+        private readonly ILogger _logger;
+
         #endregion
 
         #region snippet_Constructors
 
-        public EmployeeService(IHttpClientFactory clientFactory, ILocalStorageService localStorage)
+        public EmployeeService
+        (
+            IHttpClientFactory clientFactory,
+            ILocalStorageService localStorage,
+            ILogger<EmployeeService> logger
+        )
         {
             _httpClient = clientFactory.CreateClient("veterinary");
             _localStorage = localStorage;
+            _logger = logger;
         }
 
         #endregion
 
         #region snippet_ActionMethods
 
-        /// <summary>Returns an enumerable of employees</summary>
-        /// <returns>Enumerable of employees</returns>
-        public async Task<ListEmployeeResponseDto> GetAllAsync()
+        public async Task<HttpListResponse<EmployeeProfile>> GetAllAsync(int offset, int limit)
         {
             var jwt = await _localStorage.GetItemAsync<string>("jwt");
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-            using var httpResponse = await _httpClient.GetAsync("employees");
+            using var httpResponse = await _httpClient.GetAsync($"employees/profiles?offset={offset}&limit={limit}");
 
             var content = await httpResponse.Content.ReadAsStringAsync();
             
-            return JsonConvert.DeserializeObject<ListEmployeeResponseDto>(content);
+            return JsonConvert.DeserializeObject<HttpListResponse<EmployeeProfile>>(content);
         }
 
-        /// <summary>Returns a employee by its ID</summary>
-        /// <param name="id">Employee ID</param>
-        /// <returns>SingleEmployeeResponseDto</returns>
-        public async Task<SingleEmployeeResponseDto> GetByIdAsync(string id)
+        public async Task<EmployeeProfile> GetByIdAsync(string id)
         {
             var jwt = await _localStorage.GetItemAsync<string>("jwt");
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-            using var httpResponse = await _httpClient.GetAsync($"employees/{id}");
+            using var httpResponse = await _httpClient.GetAsync($"employees/profiles/{id}");
 
             var content = await httpResponse.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<SingleEmployeeResponseDto>(content);
+            return JsonConvert.DeserializeObject<EmployeeProfile>(content);
         }
 
-        /// <summary>Register a new employee</summary>
-        /// <param name="employee">Employee object</param>
-        /// <returns>SingleEmployeeResponseDto</returns>
-        public async Task<SingleEmployeeResponseDto> CreateAsync(Employee employee)
+        public async Task<EmployeeProfile> UpdateByIdAsync(EmployeeProfile employee)
         {
             var employeeJson = new StringContent
             (
@@ -72,42 +74,11 @@ namespace Veterinary.Services.EmployeeServices
             var jwt = await _localStorage.GetItemAsync<string>("jwt");
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-            using var httpResponse = await _httpClient.PostAsync("employees", employeeJson);
+            using var httpResponse = await _httpClient.PatchAsync($"employees/profiles/me", employeeJson);
 
             var content = await httpResponse.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<SingleEmployeeResponseDto>(content);
-        }
-
-        /// <summary>Updates partially an employee</summary>
-        /// <param name="id">Employee ID</param>
-        /// <param name="employee">Employee object</param>
-        /// <returns>SingleEmployeeResponseDto</returns>
-        public async Task<SingleEmployeeResponseDto> UpdateByIdAsync(string id, Employee employee)
-        {
-            var employeeJson = new StringContent
-            (
-                JsonConvert.SerializeObject(employee), Encoding.UTF8, "application/json"
-            );
-
-            var jwt = await _localStorage.GetItemAsync<string>("jwt");
-
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-            using var httpResponse = await _httpClient.PatchAsync($"employees/{id}", employeeJson);
-
-            var content = await httpResponse.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<SingleEmployeeResponseDto>(content);
-        }
-
-        /// <summary>Deletes an employee</summary>
-        /// <param name="id">Employee ID</param>
-        public async Task DeleteByIdAsync(string id)
-        {
-            var jwt = await _localStorage.GetItemAsync<string>("jwt");
-
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-            using var httpResponse = await _httpClient.DeleteAsync($"employees/{id}");
+            return JsonConvert.DeserializeObject<EmployeeProfile>(content);
         }
 
         #endregion
