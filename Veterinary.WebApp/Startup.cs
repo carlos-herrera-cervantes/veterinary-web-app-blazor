@@ -21,7 +21,7 @@ namespace Veterinary.WebApp
             services.AddAuthorizationCore();
             services.AddHttpClient("veterinary", c =>
             {
-                c.BaseAddress = new Uri("http://localhost:3000/api/v1/");
+                c.BaseAddress = new Uri(Environment.GetEnvironmentVariable("GATEWAY_HOST"));
             });
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IEmployeeService, EmployeeService>();

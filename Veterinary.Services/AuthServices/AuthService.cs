@@ -4,8 +4,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Veterinary.Domain.Models;
+using Veterinary.Domain.Types;
 
 namespace Veterinary.Services.AuthServices
 {
@@ -19,6 +21,8 @@ namespace Veterinary.Services.AuthServices
         
         private readonly ILocalStorageService _localStorage;
 
+        private readonly ILogger _logger;
+
         #endregion
 
         #region snippet_Constructors
@@ -27,50 +31,62 @@ namespace Veterinary.Services.AuthServices
         (
             IHttpClientFactory clientFactory,
             AuthenticationStateProvider authenticationStateProvider,
-            ILocalStorageService localStorage
+            ILocalStorageService localStorage,
+            ILogger<AuthService> logger
         )
         {
             _httpClient = clientFactory.CreateClient("veterinary");
             _authenticationStateProvider = authenticationStateProvider;
             _localStorage = localStorage;
+            _logger = logger;
         }
 
         #endregion
 
         #region snippet_ActionMethods
 
-        /// <summary>
-        /// Authenticates an employee
-        /// </summary>
-        /// <param name="credentials">Employee number and password</param>
-        /// <returns>AuthResponseDto</returns>
-        public async Task<AuthResponseDto> SignInAsync(Credentials credentials)
+        public async Task<HttpMessageResponse> SignInAsync(Credentials credentials)
         {
             var credentialsJson = new StringContent
             (
                 JsonConvert.SerializeObject(credentials), Encoding.UTF8, "application/json"
             );
 
-            using var httpResponse = await _httpClient.PostAsync("auth/sign-in", credentialsJson);
+            using var httpResponse = await _httpClient.PostAsync("authentication/sign-in", credentialsJson);
             var content = await httpResponse.Content.ReadAsStringAsync();
-            var authResponse = JsonConvert.DeserializeObject<AuthResponseDto>(content);
+            var authResponse = JsonConvert.DeserializeObject<HttpMessageResponse>(content);
 
             if (!httpResponse.IsSuccessStatusCode)
             {
                 return authResponse;
             }
 
-            await _localStorage.SetItemAsync("jwt", authResponse.Data);
+            await _localStorage.SetItemAsync("jwt", authResponse.Message);
 
             ((JwtAuthenticationStateProvider)_authenticationStateProvider)
-                .MarkUserAsAuthenticated(credentials.EmployeeNumber);
+                .MarkUserAsAuthenticated(credentials.Email);
 
             return authResponse;
         }
 
-        /// <summary>
-        /// Destroy an employee session
-        /// </summary>
+        public async Task<HttpMessageResponse> SignupEmployeeAsync(Credentials credentials)
+        {
+            var jwt = await _localStorage.GetItemAsync<string>("jwt");
+            var credentialsJson = new StringContent
+            (
+                JsonConvert.SerializeObject(credentials), Encoding.UTF8, "application/json"
+            );
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+            using var httpResponse = await _httpClient
+                .PostAsync("authentication/sign-up/employees", credentialsJson);
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
+            var authResponse = JsonConvert.DeserializeObject<HttpMessageResponse>(content);
+
+            return authResponse;
+        }
+
         public async Task SignOutAsync()
         {
             var jwt = await _localStorage.GetItemAsync<string>("jwt");
@@ -79,7 +95,7 @@ namespace Veterinary.Services.AuthServices
             ((JwtAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
             
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-            using var httpResponse = await _httpClient.PostAsync("auth/sign-out", null);
+            using var httpResponse = await _httpClient.PostAsync("authentication/sign-out", null);
         }
 
         #endregion

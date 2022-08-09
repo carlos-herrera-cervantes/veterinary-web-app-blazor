@@ -8,9 +8,9 @@
         <EditForm Model="credentials" OnValidSubmit="HandleSignIn">
             <div class="box small-width">
                 <div>
-                    <label for="employee_number" class="form-label">Employee Number</label>
-                    <InputText type="text" placeholder="5513909810" class="form-input" id="employee_number"
-                        @bind-Value="credentials.EmployeeNumber" />
+                    <label for="employee_number" class="form-label">Email</label>
+                    <InputText type="text" placeholder="direction@example.com" class="form-input" id="employee_number"
+                        @bind-Value="credentials.Email" />
                 </div>
                 <div>
                     <label for="password" class="form-label">Password</label>

@@ -38,11 +38,10 @@
                                     <td>@employee.LastName</td>
                                     <td>@employee.Gender</td>
                                     <td>
-                                        <NavLink href="@($"/employees/{employee.Id}")"><i class="fa fa-info-circle"></i> Detail
+                                        <NavLink href="@($"/employees/{employee.EmployeeId}")">
+                                            <i class="fa fa-info-circle"></i> Detail
                                         </NavLink>
                                     </td>
-                                    <td><button class="form-button-danger" @onclick="@(() => HandleDeleteAsync(employee.Id))"><i
-                                    class="fa fa-minus-circle"></i> Delete</button></td>
                                 </tr>
                             }
                         }
@@ -54,17 +53,11 @@
 </div>
 
 @code {
-    private ListEmployeeResponseDto employees;
+    private HttpListResponse<EmployeeProfile> employees;
 
     protected override async Task OnInitializedAsync()
     {
-        employees = await employeeService.GetAllAsync();
+        employees = await employeeService.GetAllAsync(0, 10);
         await base.OnInitializedAsync();
-    }
-
-    private async Task HandleDeleteAsync(string id)
-    {
-        await employeeService.DeleteByIdAsync(id);
-        employees = await employeeService.GetAllAsync();
     }
 }

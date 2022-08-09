@@ -3,3 +3,5 @@ bin
 appsettings.*
 .vscode
 .vs
+Properties
+.env
