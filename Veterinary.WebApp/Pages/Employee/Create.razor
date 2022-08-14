@@ -8,23 +8,32 @@
     <Nav></Nav>
     <div>
         <h2 class="text-center">New Employee</h2>
-        <EditForm Model="credentials" OnValidSubmit="HandleValidSubmit">
-            <div class="box-2 row-2 small-width">
-                <div>
-                    <label for="email" class="form-label">Email</label>
-                    <InputText type="text" placeholder="direction@example.com" class="form-input" id="email"
-                        @bind-Value="credentials.Email" />
+        <ErrorBoundary>
+            <ChildContent>
+                <EditForm Model="credentials" OnValidSubmit="HandleValidSubmit">
+                    <div class="box-2 row-2 small-width">
+                        <div>
+                            <label for="email" class="form-label">Email</label>
+                            <InputText type="text" placeholder="direction@example.com" class="form-input" id="email"
+                                @bind-Value="credentials.Email" />
+                        </div>
+                        <div>
+                            <label for="password" class="form-label">Password</label>
+                            <InputText type="password" placeholder="secret" class="form-input" id="password"
+                                @bind-Value="credentials.Password" />
+                        </div>
+                        <div class="content-center middle-width">
+                            <button type="submit" class="form-button dark-background white-text">Submit</button>
+                        </div>
+                    </div>
+                </EditForm>
+            </ChildContent>
+            <ErrorContent Context="ex">
+                <div class="box-error">
+                    <p>@ex.Message</p>
                 </div>
-                <div>
-                    <label for="password" class="form-label">Password</label>
-                    <InputText type="password" placeholder="secret" class="form-input" id="password"
-                        @bind-Value="credentials.Password" />
-                </div>
-                <div class="content-center middle-width">
-                    <button type="submit" class="form-button dark-background white-text">Submit</button>
-                </div>
-            </div>
-        </EditForm>
+            </ErrorContent>
+        </ErrorBoundary>
     </div>
 </div>
 

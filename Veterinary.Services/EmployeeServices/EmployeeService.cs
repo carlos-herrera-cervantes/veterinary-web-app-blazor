@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -47,6 +48,11 @@ namespace Veterinary.Services.EmployeeServices
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
             using var httpResponse = await _httpClient.GetAsync($"employees/profiles?offset={offset}&limit={limit}");
 
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                throw new Exception($"Impossible list employees. Status code: {httpResponse.StatusCode}");
+            }
+
             var content = await httpResponse.Content.ReadAsStringAsync();
             
             return JsonConvert.DeserializeObject<HttpListResponse<EmployeeProfile>>(content);
@@ -58,6 +64,11 @@ namespace Veterinary.Services.EmployeeServices
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
             using var httpResponse = await _httpClient.GetAsync($"employees/profiles/{id}");
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                throw new Exception($"Impossible get employee detail. Status code: {httpResponse.StatusCode}");
+            }
 
             var content = await httpResponse.Content.ReadAsStringAsync();
 
@@ -75,6 +86,11 @@ namespace Veterinary.Services.EmployeeServices
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
             using var httpResponse = await _httpClient.PatchAsync($"employees/profiles/me", employeeJson);
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                throw new Exception($"Impossible update employee. Status code: {httpResponse.StatusCode}");
+            }
 
             var content = await httpResponse.Content.ReadAsStringAsync();
 
