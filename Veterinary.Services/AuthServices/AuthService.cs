@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
@@ -53,13 +54,14 @@ namespace Veterinary.Services.AuthServices
             );
 
             using var httpResponse = await _httpClient.PostAsync("authentication/sign-in", credentialsJson);
-            var content = await httpResponse.Content.ReadAsStringAsync();
-            var authResponse = JsonConvert.DeserializeObject<HttpMessageResponse>(content);
 
             if (!httpResponse.IsSuccessStatusCode)
             {
-                return authResponse;
+                throw new Exception($"Impossible to sign in. Status code: {httpResponse.StatusCode}");
             }
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
+            var authResponse = JsonConvert.DeserializeObject<HttpMessageResponse>(content);
 
             await _localStorage.SetItemAsync("jwt", authResponse.Message);
 
@@ -80,6 +82,11 @@ namespace Veterinary.Services.AuthServices
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
             using var httpResponse = await _httpClient
                 .PostAsync("authentication/sign-up/employees", credentialsJson);
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                throw new Exception($"Impossible create new employee. Status code: {httpResponse.StatusCode}");
+            }
 
             var content = await httpResponse.Content.ReadAsStringAsync();
             var authResponse = JsonConvert.DeserializeObject<HttpMessageResponse>(content);

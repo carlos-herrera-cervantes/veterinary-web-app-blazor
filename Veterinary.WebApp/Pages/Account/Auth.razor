@@ -5,25 +5,34 @@
 <div class="row">
     <div class="large-hight">
         <h2 class="text-center">Authenticate</h2>
-        <EditForm Model="credentials" OnValidSubmit="HandleSignIn">
-            <div class="box small-width">
-                <div>
-                    <label for="employee_number" class="form-label">Email</label>
-                    <InputText type="text" placeholder="direction@example.com" class="form-input" id="employee_number"
-                        @bind-Value="credentials.Email" />
+        <ErrorBoundary>
+            <ChildContent>
+                <EditForm Model="credentials" OnValidSubmit="HandleSignIn">
+                    <div class="box small-width">
+                        <div>
+                            <label for="employee_number" class="form-label">Email</label>
+                            <InputText type="text" placeholder="direction@example.com" class="form-input" id="employee_number"
+                                       @bind-Value="credentials.Email" />
+                        </div>
+                        <div>
+                            <label for="password" class="form-label">Password</label>
+                            <InputText type="password" placeholder="secret" class="form-input" id="password"
+                                       @bind-Value="credentials.Password" />
+                        </div>
+                        <div class="content-center middle-width">
+                            <button type="submit" class="form-button dark-background white-text">Submit</button>
+                        </div>
+                    </div>
+                </EditForm>
+            </ChildContent>
+            <ErrorContent Context="ex">
+                <div class="box-error">
+                    <p>@ex.Message</p>
                 </div>
-                <div>
-                    <label for="password" class="form-label">Password</label>
-                    <InputText type="password" placeholder="secret" class="form-input" id="password"
-                        @bind-Value="credentials.Password" />
-                </div>
-                <div class="content-center middle-width">
-                    <button type="submit" class="form-button dark-background white-text">Submit</button>
-                </div>
-            </div>
-        </EditForm>
+            </ErrorContent>
+        </ErrorBoundary>
     </div>
-    <div class="front-background small-padding">
+    <div class="small-padding">
         <h2><i class="fas fa-paw"></i>
             Welcome again. Don't forget to do a good job
         </h2>
@@ -31,6 +40,7 @@
             Acapulco Branch Office - Hospital Veterinary
         </h4>
     </div>
+    <img class="small-uniform-square bottom-right-corner" src="images/logo.png" alt="logo" />
 </div>
 
 @code {

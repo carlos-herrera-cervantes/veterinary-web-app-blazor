@@ -13,71 +13,80 @@
         }
         else
         {
-            <EditForm Model="employee" OnValidSubmit="HandleValidSubmit">
-                <div class="box-2 row-2 small-width">
-                    <div>
-                        <div>
-                            <label for="name" class="form-label">Name</label>
-                            <InputText type="text" placeholder="name" class="form-input" id="name"
-                            @bind-Value="employee.Name" />
+            <ErrorBoundary>
+                <ChildContent>
+                    <EditForm Model="employee" OnValidSubmit="HandleValidSubmit">
+                        <div class="box-2 row-2 small-width">
+                            <div>
+                                <div>
+                                    <label for="name" class="form-label">Name</label>
+                                    <InputText type="text" placeholder="name" class="form-input" id="name"
+                                    @bind-Value="employee.Name" />
+                                </div>
+                                <div>
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <InputText type="text" placeholder="last name" class="form-input" id="lastName"
+                                    @bind-Value="employee.LastName" />
+                                </div>
+                                <div>
+                                    <label for="gender" class="form-label">Gender</label>
+                                    <InputSelect @bind-Value="employee.Gender" id="gender" class="form-input">
+                                        <option value="Not Specified">Not Specified</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </InputSelect>
+                                </div>
+                                <div>
+                                    <label for="phoneNumber" class="form-label">Phone Number</label>
+                                    <InputText type="text" placeholder="phone number" class="form-input" id="phoneNumber"
+                                    @bind-Value="employee.PhoneNumber" />
+                                </div>
+                                <div>
+                                    <label for="birthdate" class="form-label">Birthday</label>
+                                    <InputDate type="date" placeholder="birthday" class="form-input" id="birthdate"
+                                    @bind-Value="employee.Birthday" />
+                                </div>
+                                <div>
+                                    <label for="roles" class="form-label">Roles</label>
+                                    @foreach (var role in @roles)
+                                    {
+                                        var existsRole = @employee.Roles.Where(r => r == role).FirstOrDefault();
+                                        
+                                        if (existsRole is null)
+                                        {
+                                            <label class="form-label"><input type="checkbox" value="@role" @onchange="eventArgs => { OnCheckBox(role, eventArgs.Value); }" />@role</label>
+                                        }
+                                        else
+                                        {
+                                            <label class="form-label"><input type="checkbox" checked value="@role" @onchange="eventArgs => { OnCheckBox(role, eventArgs.Value); }" />@role</label>
+                                        }
+                                    }
+                                </div>
+                                <div class="content-center middle-width">
+                                    <button type="submit" class="form-button dark-background white-text">Submit</button>
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <label for="created_at" class="form-label">Created At</label>
+                                    <InputDate type="date" placeholder="created at" class="form-input" id="created_at"
+                                    @bind-Value="employee.CreatedAt" />
+                                </div>
+                                <div>
+                                    <label for="updated_at" class="form-label">Updated At</label>
+                                    <InputDate type="date" placeholder="updated at" class="form-input" id="updated_at"
+                                    @bind-Value="employee.UpdatedAt" />
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <label for="lastName" class="form-label">Last Name</label>
-                            <InputText type="text" placeholder="last name" class="form-input" id="lastName"
-                            @bind-Value="employee.LastName" />
-                        </div>
-                        <div>
-                            <label for="gender" class="form-label">Gender</label>
-                            <InputSelect @bind-Value="employee.Gender" id="gender" class="form-input">
-                                <option value="Not Specified">Not Specified</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                            </InputSelect>
-                        </div>
-                        <div>
-                            <label for="phoneNumber" class="form-label">Phone Number</label>
-                            <InputText type="text" placeholder="phone number" class="form-input" id="phoneNumber"
-                            @bind-Value="employee.PhoneNumber" />
-                        </div>
-                        <div>
-                            <label for="birthdate" class="form-label">Birthday</label>
-                            <InputDate type="date" placeholder="birthday" class="form-input" id="birthdate"
-                            @bind-Value="employee.Birthday" />
-                        </div>
-                        <div>
-                            <label for="roles" class="form-label">Roles</label>
-                            @foreach (var role in @roles)
-                            {
-                                var existsRole = @employee.Roles.Where(r => r == role).FirstOrDefault();
-                                
-                                if (existsRole is null)
-                                {
-                                    <label class="form-label"><input type="checkbox" value="@role" @onchange="eventArgs => { OnCheckBox(role, eventArgs.Value); }" />@role</label>
-                                }
-                                else
-                                {
-                                    <label class="form-label"><input type="checkbox" checked value="@role" @onchange="eventArgs => { OnCheckBox(role, eventArgs.Value); }" />@role</label>
-                                }
-                            }
-                        </div>
-                        <div class="content-center middle-width">
-                            <button type="submit" class="form-button dark-background white-text">Submit</button>
-                        </div>
+                    </EditForm>
+                </ChildContent>
+                <ErrorContent Context="ex">
+                    <div class="box-error">
+                        <p>@ex.Message</p>
                     </div>
-                    <div>
-                        <div>
-                            <label for="created_at" class="form-label">Created At</label>
-                            <InputDate type="date" placeholder="created at" class="form-input" id="created_at"
-                            @bind-Value="employee.CreatedAt" />
-                        </div>
-                        <div>
-                            <label for="updated_at" class="form-label">Updated At</label>
-                            <InputDate type="date" placeholder="updated at" class="form-input" id="updated_at"
-                            @bind-Value="employee.UpdatedAt" />
-                        </div>
-                    </div>
-                </div>
-            </EditForm>
+                </ErrorContent>
+            </ErrorBoundary>
         }
     </div>
 </div>

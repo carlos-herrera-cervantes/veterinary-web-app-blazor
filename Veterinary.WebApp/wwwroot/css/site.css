@@ -53,6 +53,11 @@ a {
     font-size: 500%;
 }
 
+.small-uniform-square {
+    width: 30%;
+    height: 50%;
+}
+
 /* forms */
 
 .form-input {
@@ -153,10 +158,6 @@ a {
     transition: 1s;
 }
 
-.front-background {
-    background-image: url('../images/front.jpg');
-}
-
 .box {
     background-color: #2e4053;
     border-radius: 20px;
@@ -171,6 +172,26 @@ a {
     background-color: #2e4053;
     border-radius: 20px;
     border-left: 7px solid #F0B27A;
+    padding: 16px;
+    transition: 1s;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.box-error {
+    background-color: #CD6155;
+    border-radius: 20px;
+    border-left: 7px solid #922B21;
+    padding: 16px;
+    transition: 1s;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.box-error:hover {
+    background-color: #D98880;
+    border-radius: 20px;
+    border-left: 7px solid #922B21;
     padding: 16px;
     transition: 1s;
     margin-left: auto;
@@ -231,6 +252,12 @@ a {
 .content-center {
     margin-left: auto;
     margin-right: auto;
+}
+
+.bottom-right-corner {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
 }
 
 /* colors */

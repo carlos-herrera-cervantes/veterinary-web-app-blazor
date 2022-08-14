@@ -14,39 +14,48 @@
             }
             else
             {
-                <table class="fl-table">
-                    <thead>
-                        <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Gender</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (employees.Data.Count() == 0)
-                        {
-                            <tr>
-                                <td colspan="3">No data</td>
-                            </tr>
-                        }
-                        else
-                        {
-                            foreach (var employee in employees.Data)
-                            {
+                <ErrorBoundary>
+                    <ChildContent>
+                        <table class="fl-table">
+                            <thead>
                                 <tr>
-                                    <td>@employee.Name</td>
-                                    <td>@employee.LastName</td>
-                                    <td>@employee.Gender</td>
-                                    <td>
-                                        <NavLink href="@($"/employees/{employee.EmployeeId}")">
-                                            <i class="fa fa-info-circle"></i> Detail
-                                        </NavLink>
-                                    </td>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Gender</th>
                                 </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
+                            </thead>
+                            <tbody>
+                                @if (employees.Data.Count() == 0)
+                                {
+                                    <tr>
+                                        <td colspan="3">No data</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    foreach (var employee in employees.Data)
+                                    {
+                                        <tr>
+                                            <td>@employee.Name</td>
+                                            <td>@employee.LastName</td>
+                                            <td>@employee.Gender</td>
+                                            <td>
+                                                <NavLink href="@($"/employees/{employee.EmployeeId}")">
+                                                    <i class="fa fa-info-circle"></i> Detail
+                                                </NavLink>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </ChildContent>
+                    <ErrorContent Context="ex">
+                        <div class="box-error">
+                            <p>@ex.Message</p>
+                        </div>
+                    </ErrorContent>
+                </ErrorBoundary>
             }
         </div>
     </div>
