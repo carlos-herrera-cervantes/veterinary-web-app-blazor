@@ -1,6 +1,7 @@
 @page "/employees/{id}"
 @inject IEmployeeService employeeService
 @inject NavigationManager navigationManager
+@inject ILogger<Detail> logger
 
 <Header></Header>
 <div class="row">
@@ -43,8 +44,8 @@
                                 </div>
                                 <div>
                                     <label for="birthdate" class="form-label">Birthday</label>
-                                    <InputDate type="date" placeholder="birthday" class="form-input" id="birthdate"
-                                    @bind-Value="employee.Birthday" />
+                                    <input type="date" placeholder="birthday" class="form-input" id="birthdate"
+                                    @bind="employee.Birthday" />
                                 </div>
                                 <div>
                                     <label for="roles" class="form-label">Roles</label>
@@ -69,13 +70,13 @@
                             <div>
                                 <div>
                                     <label for="created_at" class="form-label">Created At</label>
-                                    <InputDate type="date" placeholder="created at" class="form-input" id="created_at"
-                                    @bind-Value="employee.CreatedAt" />
+                                    <input type="text" readonly placeholder="created at" class="form-input" id="created_at"
+                                    @bind="employee.CreatedAt" />
                                 </div>
                                 <div>
                                     <label for="updated_at" class="form-label">Updated At</label>
-                                    <InputDate type="date" placeholder="updated at" class="form-input" id="updated_at"
-                                    @bind-Value="employee.UpdatedAt" />
+                                    <input type="text" readonly placeholder="updated at" class="form-input" id="updated_at"
+                                    @bind="employee.UpdatedAt" />
                                 </div>
                             </div>
                         </div>
@@ -111,7 +112,15 @@
 
     private async Task HandleValidSubmit()
     {
-        var result = await employeeService.UpdateByIdAsync(employee);
+        var updateEmployeeProfileDto = new UpdateEmployeeProfileDto
+        {
+            Name = employee.Name,
+            LastName = employee.LastName,
+            Gender = employee.Gender,
+            Birthday = employee.Birthday.ToString("yyyy-MM-ddTHH:mm:ss") + ".000Z",
+            Roles = employee.Roles
+        };
+        var result = await employeeService.UpdateByIdAsync(updateEmployeeProfileDto);
 
         if (result != null)
         {
