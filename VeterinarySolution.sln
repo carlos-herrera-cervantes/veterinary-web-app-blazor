@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Veterinary.Services", "Vete
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Veterinary.Domain", "Veterinary.Domain\Veterinary.Domain.csproj", "{7F5608F3-185F-4112-80AE-AB3E6A4F2643}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Veterinary.Tests", "Veterinary.Tests\Veterinary.Tests.csproj", "{28CE0F23-CB3F-4CD8-95B5-2481BA7823DB}"
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,5 +60,17 @@ Global
 		{7F5608F3-185F-4112-80AE-AB3E6A4F2643}.Release|x64.Build.0 = Release|Any CPU
 		{7F5608F3-185F-4112-80AE-AB3E6A4F2643}.Release|x86.ActiveCfg = Release|Any CPU
 		{7F5608F3-185F-4112-80AE-AB3E6A4F2643}.Release|x86.Build.0 = Release|Any CPU
+		{28CE0F23-CB3F-4CD8-95B5-2481BA7823DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28CE0F23-CB3F-4CD8-95B5-2481BA7823DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28CE0F23-CB3F-4CD8-95B5-2481BA7823DB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{28CE0F23-CB3F-4CD8-95B5-2481BA7823DB}.Debug|x64.Build.0 = Debug|Any CPU
+		{28CE0F23-CB3F-4CD8-95B5-2481BA7823DB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{28CE0F23-CB3F-4CD8-95B5-2481BA7823DB}.Debug|x86.Build.0 = Debug|Any CPU
+		{28CE0F23-CB3F-4CD8-95B5-2481BA7823DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28CE0F23-CB3F-4CD8-95B5-2481BA7823DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28CE0F23-CB3F-4CD8-95B5-2481BA7823DB}.Release|x64.ActiveCfg = Release|Any CPU
+		{28CE0F23-CB3F-4CD8-95B5-2481BA7823DB}.Release|x64.Build.0 = Release|Any CPU
+		{28CE0F23-CB3F-4CD8-95B5-2481BA7823DB}.Release|x86.ActiveCfg = Release|Any CPU
+		{28CE0F23-CB3F-4CD8-95B5-2481BA7823DB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
