@@ -241,10 +241,8 @@ public class EmployeeServiceTests
 
         await Assert.ThrowsAsync<Exception>(async () =>
         {
-            var employee = new EmployeeProfile
+            var employee = new UpdateEmployeeProfileDto
             {
-                EmployeeId = "dummyid",
-                Email = "dummy@example.com",
                 Name = "dummy name",
                 LastName = "dummy last name"
             };
@@ -287,10 +285,8 @@ public class EmployeeServiceTests
             _mockLocalStorageService.Object,
             _mockLogger.Object
         );
-        var employee = new EmployeeProfile
+        var employee = new UpdateEmployeeProfileDto
         {
-            EmployeeId = "dummyid",
-            Email = "dummy@example.com",
             Name = "dummy name",
             LastName = "dummy last name"
         };
@@ -307,8 +303,6 @@ public class EmployeeServiceTests
                 ItExpr.IsAny<CancellationToken>()
             );
 
-        Assert.Equal("dummyid", employee.EmployeeId);
-        Assert.Equal("dummy@example.com", employee.Email);
         Assert.Equal("dummy name", employee.Name);
         Assert.Equal("dummy last name", employee.LastName);
     }

@@ -75,8 +75,9 @@ namespace Veterinary.Services.EmployeeServices
             return JsonConvert.DeserializeObject<EmployeeProfile>(content);
         }
 
-        public async Task<EmployeeProfile> UpdateByIdAsync(EmployeeProfile employee)
+        public async Task<EmployeeProfile> UpdateByIdAsync(UpdateEmployeeProfileDto employee)
         {
+            _logger.LogInformation($"BIRTHDAY: {employee.Birthday}");
             var employeeJson = new StringContent
             (
                 JsonConvert.SerializeObject(employee), Encoding.UTF8, "application/json"

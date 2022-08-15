@@ -158,6 +158,16 @@ a {
     transition: 1s;
 }
 
+.navigation a:hover {
+    text-align: right;
+    margin-right: 10%;
+    margin-left: 15%;
+    margin-bottom: 10%;
+    border-bottom: 7px solid #85929E;
+    padding-bottom: 5%;
+    transition: 1s;
+}
+
 .box {
     background-color: #2e4053;
     border-radius: 20px;

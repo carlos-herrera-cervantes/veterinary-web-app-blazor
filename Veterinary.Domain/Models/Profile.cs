@@ -36,4 +36,22 @@ namespace Veterinary.Domain.Models
         [JsonProperty("updated_at")]
         public DateTime UpdatedAt { get; set; }
     }
+
+    public class UpdateEmployeeProfileDto
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("last_name")]
+        public string LastName { get; set; }
+
+        [JsonProperty("gender")]
+        public string Gender { get; set; }
+
+        [JsonProperty("birthday")]
+        public string Birthday { get; set; }
+
+        [JsonProperty("roles")]
+        public List<string> Roles { get; set; }
+    }
 }
