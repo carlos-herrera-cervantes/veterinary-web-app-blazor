@@ -1,4 +1,12 @@
+@inject ILocalStorageService localStorage
+
 <div class="row-3 green-background header">
+    <div>
+        <img src="@avatar" alt="avatar" class="tiny-uniform-polygon top-left-corner" />
+    </div>
+    <div class="header-option">
+        <NavLink href="/session/profile"> @name</NavLink>
+    </div>
     <div>
         <h2><i class="fas fa-cat"></i> Saturn - Acapulco Branch Office</h2>
     </div>
@@ -9,3 +17,15 @@
         <NavLink href="/employees"><i class="fa fa-list"></i> List</NavLink>
     </div>
 </div>
+
+@code {
+    private string avatar;
+
+    private string name;
+
+    protected override async Task OnInitializedAsync()
+    {
+        name = await localStorage.GetItemAsync<string>("name");
+        avatar = await localStorage.GetItemAsync<string>("avatar");
+    }
+}

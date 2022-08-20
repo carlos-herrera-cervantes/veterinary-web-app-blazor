@@ -2,6 +2,7 @@
 @inject IEmployeeService employeeService
 @inject NavigationManager navigationManager
 @inject ILogger<Detail> logger
+@inject ILocalStorageService localStorage
 
 <Header></Header>
 <div class="row">
@@ -19,6 +20,9 @@
                     <EditForm Model="employee" OnValidSubmit="HandleValidSubmit">
                         <div class="box-2 row-2 small-width">
                             <div>
+                                <div class="text-center">
+                                    <img src="@avatar" alt="avatar" class="small-uniform-square medium-white-border" />
+                                </div>
                                 <div>
                                     <label for="name" class="form-label">Name</label>
                                     <InputText type="text" placeholder="name" class="form-input" id="name"
@@ -47,6 +51,21 @@
                                     <input type="date" placeholder="birthday" class="form-input" id="birthdate"
                                     @bind="employee.Birthday" />
                                 </div>
+                                <div class="content-center middle-width">
+                                    <button type="submit" class="form-button dark-background white-text">Submit</button>
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <label for="created_at" class="form-label">Created At</label>
+                                    <input type="text" readonly placeholder="created at" class="form-input" id="created_at"
+                                    @bind="employee.CreatedAt" />
+                                </div>
+                                <div>
+                                    <label for="updated_at" class="form-label">Updated At</label>
+                                    <input type="text" readonly placeholder="updated at" class="form-input" id="updated_at"
+                                    @bind="employee.UpdatedAt" />
+                                </div>
                                 <div>
                                     <label for="roles" class="form-label">Roles</label>
                                     @foreach (var role in @roles)
@@ -62,21 +81,6 @@
                                             <label class="form-label"><input type="checkbox" checked value="@role" @onchange="eventArgs => { OnCheckBox(role, eventArgs.Value); }" />@role</label>
                                         }
                                     }
-                                </div>
-                                <div class="content-center middle-width">
-                                    <button type="submit" class="form-button dark-background white-text">Submit</button>
-                                </div>
-                            </div>
-                            <div>
-                                <div>
-                                    <label for="created_at" class="form-label">Created At</label>
-                                    <input type="text" readonly placeholder="created at" class="form-input" id="created_at"
-                                    @bind="employee.CreatedAt" />
-                                </div>
-                                <div>
-                                    <label for="updated_at" class="form-label">Updated At</label>
-                                    <input type="text" readonly placeholder="updated at" class="form-input" id="updated_at"
-                                    @bind="employee.UpdatedAt" />
                                 </div>
                             </div>
                         </div>
@@ -95,6 +99,8 @@
 @code {
     private EmployeeProfile employee;
 
+    private string avatar;
+
     private IEnumerable<string> roles = new List<string>
     {
         "SuperAdmin",
@@ -107,6 +113,7 @@
     protected override async Task OnInitializedAsync()
     {
         employee = await employeeService.GetByIdAsync(Id);
+        avatar = await localStorage.GetItemAsync<string>("avatar");
         await base.OnInitializedAsync();
     }
 

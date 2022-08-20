@@ -58,6 +58,23 @@ namespace Veterinary.Services.EmployeeServices
             return JsonConvert.DeserializeObject<HttpListResponse<EmployeeProfile>>(content);
         }
 
+        public async Task<EmployeeProfile> GetAsync()
+        {
+            var jwt = await _localStorage.GetItemAsync<string>("jwt");
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+            using var httpResponse = await _httpClient.GetAsync($"employees/profiles/me");
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<EmployeeProfile>(content);
+        }
+
         public async Task<EmployeeProfile> GetByIdAsync(string id)
         {
             var jwt = await _localStorage.GetItemAsync<string>("jwt");

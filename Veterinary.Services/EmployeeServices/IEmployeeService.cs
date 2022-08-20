@@ -8,6 +8,8 @@ namespace Veterinary.Services.EmployeeServices
     {
          Task<HttpListResponse<EmployeeProfile>> GetAllAsync(int offset, int limit);
 
+         Task<EmployeeProfile> GetAsync();
+
          Task<EmployeeProfile> GetByIdAsync(string id);
 
          Task<EmployeeProfile> UpdateByIdAsync(UpdateEmployeeProfileDto employeeProfile);
