@@ -19,10 +19,21 @@ a {
     margin-top: 5%;
 }
 
+/* borders */
+
+.medium-white-border {
+    border-radius: 50%;
+    border: 4px solid white;
+}
+
 /* measures */
 
 .small-margin-top {
     margin-top: 3%;
+}
+
+.tiny-width {
+    width: 0%;
 }
 
 .small-width {
@@ -58,7 +69,50 @@ a {
     height: 50%;
 }
 
+.medium-uniform-polygon {
+    width: 30%;
+    height: 95%;
+}
+
+.tiny-uniform-polygon {
+    width: 4%;
+    height: 6%;
+    border-radius: 50%;
+    border: 4px solid white;
+}
+
 /* forms */
+
+.form-file {
+    color: white;
+    font-size: 90%;
+    margin-bottom: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.3rem;
+    border-radius: 0.2rem;
+    border: none;
+    width: 90%;
+    display: block;
+    border: 2px solid #F0B27A;
+    transition: all 0.3s;
+}
+
+.form-file:hover {
+    color: white;
+    font-size: 90%;
+    margin-bottom: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.3rem;
+    border-radius: 0.2rem;
+    border: none;
+    width: 90%;
+    display: block;
+    border: 2px solid #F0B27A;
+    transition: all 0.3s;
+    background-color: #F0B27A;
+}
 
 .form-input {
     color: #333;
@@ -270,6 +324,12 @@ a {
     bottom: 0px;
 }
 
+.top-left-corner {
+    position: absolute;
+    left: 3%;
+    top: 0px;
+}
+
 /* colors */
 
 .green-border {
@@ -288,6 +348,10 @@ a {
     color: white;
 }
 
+.invisible {
+    opacity: 0;
+}
+
 /* Grid */
 
 .row {
@@ -303,7 +367,7 @@ a {
 
 .row-3 {
     display: grid;
-    grid-template-columns: 30% auto auto;
+    grid-template-columns: 10% 20% 30% auto auto;
 }
 
 @media screen and (max-width: 1500px) {
@@ -318,4 +382,122 @@ a {
     .navigation a {
         border-bottom: 5px solid #F0B27A;
     }
+}
+
+/* animations */
+
+@-webkit-keyframes scaleAnimation {
+    0% {
+      opacity: 0;
+      transform: scale(1.5);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+}
+@keyframes scaleAnimation {
+    0% {
+      opacity: 0;
+      transform: scale(1.5);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+}
+@-webkit-keyframes drawCircle {
+    0% {
+      stroke-dashoffset: 151px;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+}
+@keyframes drawCircle {
+    0% {
+      stroke-dashoffset: 151px;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+}
+@-webkit-keyframes drawCheck {
+    0% {
+      stroke-dashoffset: 36px;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+}
+@keyframes drawCheck {
+    0% {
+      stroke-dashoffset: 36px;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+}
+@-webkit-keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+}
+@keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+}
+@-webkit-keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+}
+@keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+}
+#successAnimationCircle {
+    stroke-dasharray: 151px 151px;
+    stroke: #F0B27A;
+}
+  
+#successAnimationCheck {
+    stroke-dasharray: 36px 36px;
+    stroke: #F0B27A;
+}
+  
+#successAnimationResult {
+    fill: #F0B27A;
+    opacity: 0;
+}
+  
+#successAnimation.animated {
+    -webkit-animation: 1s ease-out 0s 1 both scaleAnimation;
+            animation: 1s ease-out 0s 1 both scaleAnimation;
+}
+#successAnimation.animated #successAnimationCircle {
+    -webkit-animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle, 0.3s linear 0.9s 1 both fadeOut;
+            animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle, 0.3s linear 0.9s 1 both fadeOut;
+}
+#successAnimation.animated #successAnimationCheck {
+    -webkit-animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck, 0.3s linear 0.9s 1 both fadeOut;
+            animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck, 0.3s linear 0.9s 1 both fadeOut;
+}
+#successAnimation.animated #successAnimationResult {
+    -webkit-animation: 0.3s linear 0.9s both fadeIn;
+            animation: 0.3s linear 0.9s both fadeIn;
 }

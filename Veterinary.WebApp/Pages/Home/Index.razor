@@ -1,5 +1,8 @@
 @page "/index"
 @attribute [Authorize]
+@inject ILocalStorageService localStorage
+@inject IEmployeeService employeeService
+@inject IAvatarService avatarService
 
 <div class="row">
     <Nav></Nav>
@@ -13,3 +16,14 @@
     </div>
     <img class="small-uniform-square bottom-right-corner" src="images/logo.png" alt="logo" />
 </div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var profile = await employeeService.GetAsync();
+        var avatar = await avatarService.GetAsync();
+
+        await localStorage.SetItemAsync("name", $"{profile.Name} {profile.LastName}");
+        await localStorage.SetItemAsync("avatar", avatar.Path);
+    }
+}

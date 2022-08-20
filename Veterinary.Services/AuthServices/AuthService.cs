@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -99,6 +100,9 @@ namespace Veterinary.Services.AuthServices
             var jwt = await _localStorage.GetItemAsync<string>("jwt");
 
             await _localStorage.RemoveItemAsync("jwt");
+            await _localStorage.RemoveItemAsync("name");
+            await _localStorage.RemoveItemAsync("avatar");
+
             ((JwtAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
             
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);

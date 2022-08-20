@@ -25,6 +25,7 @@ namespace Veterinary.WebApp
             });
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IEmployeeService, EmployeeService>();
+            services.AddTransient<IAvatarService, AvatarService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

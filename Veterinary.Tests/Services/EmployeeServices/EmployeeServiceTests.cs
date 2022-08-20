@@ -211,6 +211,104 @@ public class EmployeeServiceTests
     }
 
     [Fact]
+    public async Task GetAsyncShouldReturnNull()
+    {
+        var mockDelegatingHandler = new Mock<DelegatingHandler>();
+        var httpClient = new HttpClient(mockDelegatingHandler.Object);
+        httpClient.BaseAddress = new Uri("http://localhost:9001");
+
+        _mockHttpClientFactory
+            .Setup(x => x.CreateClient(It.IsAny<string>()))
+            .Returns(httpClient)
+            .Verifiable();
+        mockDelegatingHandler
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>
+            (
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>()
+            )
+            .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.InternalServerError))
+            .Verifiable();
+
+        var employeeService = new EmployeeService
+        (
+            _mockHttpClientFactory.Object,
+            _mockLocalStorageService.Object,
+            _mockLogger.Object
+        );
+        var employee = await employeeService.GetAsync();
+
+        _mockHttpClientFactory.Verify(x => x.CreateClient(It.IsAny<string>()));
+        mockDelegatingHandler
+            .Protected()
+            .Verify
+            (
+                "SendAsync",
+                Times.Exactly(1),
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>()
+            );
+
+        Assert.Null(employee);
+    }
+
+    [Fact]
+    public async Task GetAsyncShouldReturnProfile()
+    {
+        var mockDelegatingHandler = new Mock<DelegatingHandler>();
+        var httpClient = new HttpClient(mockDelegatingHandler.Object);
+        httpClient.BaseAddress = new Uri("http://localhost:9001");
+
+        var dummyContent = @"{""employee_id"": ""dummyid"", ""email"": ""dummy@example.com""," +
+            @"""name"": ""dummy"", ""last_name"": ""dummy last name""}";
+
+        _mockHttpClientFactory
+            .Setup(x => x.CreateClient(It.IsAny<string>()))
+            .Returns(httpClient)
+            .Verifiable();
+        mockDelegatingHandler
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>
+            (
+                "SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>()
+            )
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(dummyContent)
+            })
+            .Verifiable();
+
+        var employeeService = new EmployeeService
+        (
+            _mockHttpClientFactory.Object,
+            _mockLocalStorageService.Object,
+            _mockLogger.Object
+        );
+        var employee = await employeeService.GetAsync();
+
+        _mockHttpClientFactory.Verify(x => x.CreateClient(It.IsAny<string>()));
+        mockDelegatingHandler
+            .Protected()
+            .Verify
+            (
+                "SendAsync",
+                Times.Exactly(1),
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>()
+            );
+
+        Assert.Equal("dummyid", employee.EmployeeId);
+        Assert.Equal("dummy@example.com", employee.Email);
+        Assert.Equal("dummy", employee.Name);
+        Assert.Equal("dummy last name", employee.LastName);
+    }
+
+    [Fact]
     public async Task UpdateByIdAsyncShouldThrowException()
     {
         var mockDelegatingHandler = new Mock<DelegatingHandler>();
