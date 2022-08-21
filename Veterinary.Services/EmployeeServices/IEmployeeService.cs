@@ -12,6 +12,6 @@ namespace Veterinary.Services.EmployeeServices
 
          Task<EmployeeProfile> GetByIdAsync(string id);
 
-         Task<EmployeeProfile> UpdateByIdAsync(UpdateEmployeeProfileDto employeeProfile);
+         Task<EmployeeProfile> UpdateByIdAsync(string id, UpdateEmployeeProfileDto employeeProfile);
     }
 }

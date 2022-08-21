@@ -92,9 +92,8 @@ namespace Veterinary.Services.EmployeeServices
             return JsonConvert.DeserializeObject<EmployeeProfile>(content);
         }
 
-        public async Task<EmployeeProfile> UpdateByIdAsync(UpdateEmployeeProfileDto employee)
+        public async Task<EmployeeProfile> UpdateByIdAsync(string id, UpdateEmployeeProfileDto employee)
         {
-            _logger.LogInformation($"BIRTHDAY: {employee.Birthday}");
             var employeeJson = new StringContent
             (
                 JsonConvert.SerializeObject(employee), Encoding.UTF8, "application/json"
@@ -103,7 +102,7 @@ namespace Veterinary.Services.EmployeeServices
             var jwt = await _localStorage.GetItemAsync<string>("jwt");
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-            using var httpResponse = await _httpClient.PatchAsync($"employees/profiles/me", employeeJson);
+            using var httpResponse = await _httpClient.PatchAsync($"employees/profiles/{id}", employeeJson);
 
             if (!httpResponse.IsSuccessStatusCode)
             {

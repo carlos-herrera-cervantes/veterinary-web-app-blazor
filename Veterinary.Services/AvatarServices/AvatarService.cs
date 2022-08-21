@@ -52,7 +52,7 @@ public class AvatarService : IAvatarService
         var jwt = await _localStorage.GetItemAsync<string>("jwt");
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-        using var httpResponse = await _httpClient.PostAsync($"employees/avatar", content);
+        using var httpResponse = await _httpClient.PostAsync($"employees/avatar/me", content);
 
         if (!httpResponse.IsSuccessStatusCode)
         {

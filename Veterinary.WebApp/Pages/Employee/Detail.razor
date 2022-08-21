@@ -127,7 +127,7 @@
             Birthday = employee.Birthday.ToString("yyyy-MM-ddTHH:mm:ss") + ".000Z",
             Roles = employee.Roles
         };
-        var result = await employeeService.UpdateByIdAsync(updateEmployeeProfileDto);
+        var result = await employeeService.UpdateByIdAsync(Id, updateEmployeeProfileDto);
 
         if (result != null)
         {
