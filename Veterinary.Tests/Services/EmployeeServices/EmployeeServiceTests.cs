@@ -344,7 +344,7 @@ public class EmployeeServiceTests
                 Name = "dummy name",
                 LastName = "dummy last name"
             };
-            await employeeService.UpdateByIdAsync(employee);
+            await employeeService.UpdateByIdAsync(id: "", employee);
         });
     }
 
@@ -388,7 +388,7 @@ public class EmployeeServiceTests
             Name = "dummy name",
             LastName = "dummy last name"
         };
-        var updateResult = await employeeService.UpdateByIdAsync(employee);
+        var updateResult = await employeeService.UpdateByIdAsync(id: "", employee);
 
         _mockHttpClientFactory.Verify(x => x.CreateClient(It.IsAny<string>()));
         mockDelegatingHandler

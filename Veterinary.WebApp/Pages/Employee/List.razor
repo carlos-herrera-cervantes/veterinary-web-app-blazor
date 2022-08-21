@@ -19,9 +19,9 @@
                         <table class="fl-table">
                             <thead>
                                 <tr>
+                                    <th>Email</th>
                                     <th>First Name</th>
                                     <th>Last Name</th>
-                                    <th>Gender</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -36,9 +36,9 @@
                                     foreach (var employee in employees.Data)
                                     {
                                         <tr>
+                                            <td>@employee.Email</td>
                                             <td>@employee.Name</td>
                                             <td>@employee.LastName</td>
-                                            <td>@employee.Gender</td>
                                             <td>
                                                 <NavLink href="@($"/employees/{employee.EmployeeId}")">
                                                     <i class="fa fa-info-circle"></i> Detail
