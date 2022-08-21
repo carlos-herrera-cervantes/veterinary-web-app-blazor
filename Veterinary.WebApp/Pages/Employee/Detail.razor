@@ -3,6 +3,7 @@
 @inject NavigationManager navigationManager
 @inject ILogger<Detail> logger
 @inject ILocalStorageService localStorage
+@inject IAvatarService avatarService
 
 <Header></Header>
 <div class="row">
@@ -21,7 +22,7 @@
                         <div class="box-2 row-2 small-width">
                             <div>
                                 <div class="text-center">
-                                    <img src="@avatar" alt="avatar" class="small-uniform-square medium-white-border" />
+                                    <img src="@avatarPath" alt="avatar" class="small-uniform-square medium-white-border" />
                                 </div>
                                 <div>
                                     <label for="name" class="form-label">Name</label>
@@ -99,7 +100,7 @@
 @code {
     private EmployeeProfile employee;
 
-    private string avatar;
+    private string avatarPath;
 
     private IEnumerable<string> roles = new List<string>
     {
@@ -112,8 +113,10 @@
 
     protected override async Task OnInitializedAsync()
     {
+        var avatar = await avatarService.GetByIdAsync(Id);
+        avatarPath = avatar.Path;
+
         employee = await employeeService.GetByIdAsync(Id);
-        avatar = await localStorage.GetItemAsync<string>("avatar");
         await base.OnInitializedAsync();
     }
 

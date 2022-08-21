@@ -1,4 +1,9 @@
+@inject ILocalStorageService localStorage
+
 <div class="navigation">
+    <NavLink href="/session/profile" Match="NavLinkMatch.All" class="no-style">
+        <img src="@avatar" alt="avatar" class="medium-uniform-polygon medium-white-border" />
+    </NavLink>
     <h2 class="text-center">Sections</h2>
     <NavLink href="/index" Match="NavLinkMatch.All">
         <i class="fas fa-home"></i> Home
@@ -24,5 +29,10 @@
 </div>
 
 @code {
-    
+    private string avatar;
+
+    protected override async Task OnInitializedAsync()
+    {
+        avatar = await localStorage.GetItemAsync<string>("avatar");
+    }
 }

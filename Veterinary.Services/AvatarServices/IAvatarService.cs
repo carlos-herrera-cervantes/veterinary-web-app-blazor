@@ -8,5 +8,7 @@ public interface IAvatarService
 {
     Task<Avatar> GetAsync();
 
+    Task<Avatar> GetByIdAsync(string id);
+
     Task<Avatar> Upload(MultipartFormDataContent content);
 }
