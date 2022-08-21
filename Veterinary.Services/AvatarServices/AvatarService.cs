@@ -47,6 +47,23 @@ public class AvatarService : IAvatarService
         return JsonConvert.DeserializeObject<Avatar>(content);
     }
 
+    public async Task<Avatar> GetByIdAsync(string id)
+    {
+        var jwt = await _localStorage.GetItemAsync<string>("jwt");
+
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+        using var httpResponse = await _httpClient.GetAsync($"employees/avatar/{id}");
+
+        if (!httpResponse.IsSuccessStatusCode)
+        {
+            return new Avatar{ Path = "" };
+        }
+
+        var content = await httpResponse.Content.ReadAsStringAsync();
+            
+        return JsonConvert.DeserializeObject<Avatar>(content);
+    }
+
     public async Task<Avatar> Upload(MultipartFormDataContent content)
     {
         var jwt = await _localStorage.GetItemAsync<string>("jwt");

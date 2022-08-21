@@ -75,10 +75,8 @@ a {
 }
 
 .tiny-uniform-polygon {
-    width: 4%;
-    height: 6%;
-    border-radius: 50%;
-    border: 4px solid white;
+    width: 15%;
+    height: 100%;
 }
 
 /* forms */
@@ -200,6 +198,16 @@ a {
 
 .navigation {
     background-color: #2e4053;
+    height: calc(100% - 5%);
+    overflow-y: auto;
+}
+
+.navigation a.no-style {
+    text-align: center;
+}
+
+.navigation a.no-style:hover {
+    text-align: center;
 }
 
 .navigation a {
@@ -367,7 +375,7 @@ a {
 
 .row-3 {
     display: grid;
-    grid-template-columns: 10% 20% 30% auto auto;
+    grid-template-columns: auto auto auto;
 }
 
 @media screen and (max-width: 1500px) {
