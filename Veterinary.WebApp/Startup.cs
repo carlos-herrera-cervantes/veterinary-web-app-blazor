@@ -8,40 +8,39 @@ using Microsoft.Extensions.Hosting;
 using Veterinary.Services.AuthServices;
 using Veterinary.Services.EmployeeServices;
 
-namespace Veterinary.WebApp
+namespace Veterinary.WebApp;
+
+public class Startup
 {
-    public class Startup
+    public void ConfigureServices(IServiceCollection services)
     {
-        public void ConfigureServices(IServiceCollection services)
+        services.AddRazorPages();
+        services.AddServerSideBlazor();
+        services.AddBlazoredLocalStorage();
+        services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>();
+        services.AddAuthorizationCore();
+        services.AddHttpClient("veterinary", c =>
         {
-            services.AddRazorPages();
-            services.AddServerSideBlazor();
-            services.AddBlazoredLocalStorage();
-            services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>();
-            services.AddAuthorizationCore();
-            services.AddHttpClient("veterinary", c =>
-            {
-                c.BaseAddress = new Uri(Environment.GetEnvironmentVariable("GATEWAY_HOST"));
-            });
-            services.AddTransient<IAuthService, AuthService>();
-            services.AddTransient<IEmployeeService, EmployeeService>();
-            services.AddTransient<IAvatarService, AvatarService>();
+            c.BaseAddress = new Uri(Environment.GetEnvironmentVariable("GATEWAY_HOST"));
+        });
+        services.AddTransient<IAuthService, AuthService>();
+        services.AddTransient<IEmployeeService, EmployeeService>();
+        services.AddTransient<IAvatarService, AvatarService>();
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        app.UseRouting();
+        app.UseStaticFiles();
+        app.UseEndpoints(endpoints =>
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseRouting();
-            app.UseStaticFiles();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapBlazorHub();
-                endpoints.MapFallbackToPage("/_Host");
-            });
-        }
+            endpoints.MapBlazorHub();
+            endpoints.MapFallbackToPage("/_Host");
+        });
     }
 }
