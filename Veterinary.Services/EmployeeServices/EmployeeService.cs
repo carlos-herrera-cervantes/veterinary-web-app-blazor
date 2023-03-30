@@ -25,8 +25,7 @@ public class EmployeeService : IEmployeeService
 
     #region snippet_Constructors
 
-    public EmployeeService
-    (
+    public EmployeeService(
         IHttpClientFactory clientFactory,
         ILocalStorageService localStorage,
         ILogger<EmployeeService> logger

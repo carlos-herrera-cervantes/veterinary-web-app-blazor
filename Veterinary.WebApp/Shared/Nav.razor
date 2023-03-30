@@ -1,8 +1,9 @@
 @inject ILocalStorageService localStorage
+@inject IAvatarService avatarService
 
 <div class="navigation">
     <NavLink href="/session/profile" Match="NavLinkMatch.All" class="no-style">
-        <img src="@avatar" alt="avatar" class="medium-uniform-polygon medium-white-border" />
+        <img src="@avatarPath" alt="avatar" class="medium-uniform-polygon medium-white-border" />
     </NavLink>
     <h2 class="text-center">Sections</h2>
     <NavLink href="/index" Match="NavLinkMatch.All">
@@ -29,10 +30,16 @@
 </div>
 
 @code {
-    private string avatar;
+    private string avatarPath;
 
     protected override async Task OnInitializedAsync()
     {
-        avatar = await localStorage.GetItemAsync<string>("avatar");
+        avatarPath = await localStorage.GetItemAsync<string>("avatar");
+
+        if (String.IsNullOrEmpty(avatarPath))
+        {
+            var avatar = await avatarService.GetAsync();
+            avatarPath = avatar.Path;
+        }
     }
 }

@@ -4,10 +4,12 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Moq.Protected;
-using Veterinary.Services.AuthServices;
 using Xunit;
+using Veterinary.Services.AuthServices;
+using Veterinary.Domain.Config;
 
 namespace Veterinary.Tests.Services.AuthServices;
 
@@ -20,6 +22,8 @@ public class AvatarServiceTests
 
     private readonly Mock<ILocalStorageService> _mockLocalStorageService;
 
+    private readonly Mock<ILogger<AvatarService>> _mockLogger;
+
     #endregion
 
     #region snippet_Constructors
@@ -28,6 +32,7 @@ public class AvatarServiceTests
     {
         _mockHttpClientFactory = new Mock<IHttpClientFactory>();
         _mockLocalStorageService = new Mock<ILocalStorageService>();
+        _mockLogger = new Mock<ILogger<AvatarService>>();
     }
 
     #endregion
@@ -35,7 +40,7 @@ public class AvatarServiceTests
     #region snippet_Tests
 
     [Fact]
-    public async Task GetAsyncShouldReturnNull()
+    public async Task GetAsyncShouldReturnDefaultAvatar()
     {
         var mockDelegatingHandler = new Mock<DelegatingHandler>();
         var httpClient = new HttpClient(mockDelegatingHandler.Object);
@@ -59,11 +64,12 @@ public class AvatarServiceTests
         var avatarService = new AvatarService
         (
             _mockHttpClientFactory.Object,
-            _mockLocalStorageService.Object
+            _mockLocalStorageService.Object,
+            _mockLogger.Object
         );
         var avatar = await avatarService.GetAsync();
 
-        Assert.Null(avatar);
+        Assert.True(avatar.Path == AvatarConfig.NoProfilePicture);
     }
 
     [Fact]
@@ -98,7 +104,8 @@ public class AvatarServiceTests
         var avatarService = new AvatarService
         (
             _mockHttpClientFactory.Object,
-            _mockLocalStorageService.Object
+            _mockLocalStorageService.Object,
+            _mockLogger.Object
         );
         var avatar = await avatarService.GetAsync();
 
@@ -106,7 +113,7 @@ public class AvatarServiceTests
     }
 
     [Fact]
-    public async Task GetByIdAsyncShouldReturnEmptyPath()
+    public async Task GetByIdAsyncShouldReturnDefaultAvatar()
     {
         var mockDelegatingHandler = new Mock<DelegatingHandler>();
         var httpClient = new HttpClient(mockDelegatingHandler.Object);
@@ -130,11 +137,12 @@ public class AvatarServiceTests
         var avatarService = new AvatarService
         (
             _mockHttpClientFactory.Object,
-            _mockLocalStorageService.Object
+            _mockLocalStorageService.Object,
+            _mockLogger.Object
         );
         var avatar = await avatarService.GetByIdAsync(id: "dummy-id");
 
-        Assert.Empty(avatar.Path);
+        Assert.True(avatar.Path == AvatarConfig.NoProfilePicture);
     }
 
     public async Task GetByIdAsyncShouldReturnAvatar()
@@ -168,7 +176,8 @@ public class AvatarServiceTests
         var avatarService = new AvatarService
         (
             _mockHttpClientFactory.Object,
-            _mockLocalStorageService.Object
+            _mockLocalStorageService.Object,
+            _mockLogger.Object
         );
         var avatar = await avatarService.GetByIdAsync(id: "dummy-id");
 
@@ -200,7 +209,8 @@ public class AvatarServiceTests
         var avatarService = new AvatarService
         (
             _mockHttpClientFactory.Object,
-            _mockLocalStorageService.Object
+            _mockLocalStorageService.Object,
+            _mockLogger.Object
         );
 
         await Assert.ThrowsAsync<Exception>(async () => await avatarService.Upload(null));
@@ -238,7 +248,8 @@ public class AvatarServiceTests
         var avatarService = new AvatarService
         (
             _mockHttpClientFactory.Object,
-            _mockLocalStorageService.Object
+            _mockLocalStorageService.Object,
+            _mockLogger.Object
         );
         var avatar = await avatarService.Upload(null);
 

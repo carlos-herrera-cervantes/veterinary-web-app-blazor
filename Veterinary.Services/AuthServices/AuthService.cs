@@ -28,8 +28,7 @@ public class AuthService : IAuthService
 
     #region snippet_Constructors
 
-    public AuthService
-    (
+    public AuthService(
         IHttpClientFactory clientFactory,
         AuthenticationStateProvider authenticationStateProvider,
         ILocalStorageService localStorage,
