@@ -8,7 +8,10 @@
         <ErrorBoundary>
             <ChildContent>
                 <EditForm Model="credentials" OnValidSubmit="HandleSignIn">
-                    <div class="box small-width">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div id="auth-form" class="box small-width">
                         <div>
                             <label for="employee_number" class="form-label">Email</label>
                             <InputText type="text" placeholder="direction@example.com" class="form-input" id="employee_number"

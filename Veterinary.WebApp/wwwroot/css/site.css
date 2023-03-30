@@ -48,6 +48,10 @@ a {
     padding: 5%;
 }
 
+.middle-padding {
+    padding: 10%;
+}
+
 .large-width {
     width: 100%;
 }
@@ -215,7 +219,7 @@ a {
     margin-right: 10%;
     margin-left: 15%;
     margin-bottom: 10%;
-    border-bottom: 7px solid #F0B27A;
+    border-bottom: 2px solid #F0B27A;
     padding-bottom: 5%;
     transition: 1s;
 }
@@ -225,7 +229,7 @@ a {
     margin-right: 10%;
     margin-left: 15%;
     margin-bottom: 10%;
-    border-bottom: 7px solid #85929E;
+    border-bottom: 2px solid #85929E;
     padding-bottom: 5%;
     transition: 1s;
 }
@@ -388,7 +392,11 @@ a {
     }
 
     .navigation a {
-        border-bottom: 5px solid #F0B27A;
+        border-bottom: 2px solid #F0B27A;
+    }
+
+    #auth-form {
+        font-size: 80%;
     }
 }
 
@@ -482,17 +490,17 @@ a {
     stroke-dasharray: 151px 151px;
     stroke: #F0B27A;
 }
-  
+
 #successAnimationCheck {
     stroke-dasharray: 36px 36px;
     stroke: #F0B27A;
 }
-  
+
 #successAnimationResult {
     fill: #F0B27A;
     opacity: 0;
 }
-  
+
 #successAnimation.animated {
     -webkit-animation: 1s ease-out 0s 1 both scaleAnimation;
             animation: 1s ease-out 0s 1 both scaleAnimation;

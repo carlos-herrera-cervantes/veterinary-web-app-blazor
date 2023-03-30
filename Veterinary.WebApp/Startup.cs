@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Veterinary.Services.AuthServices;
 using Veterinary.Services.EmployeeServices;
+using Veterinary.Domain.Config;
 
 namespace Veterinary.WebApp;
 
@@ -21,7 +22,7 @@ public class Startup
         services.AddAuthorizationCore();
         services.AddHttpClient("veterinary", c =>
         {
-            c.BaseAddress = new Uri(Environment.GetEnvironmentVariable("GATEWAY_HOST"));
+            c.BaseAddress = new Uri(AppConfig.GatewayHost);
         });
         services.AddTransient<IAuthService, AuthService>();
         services.AddTransient<IEmployeeService, EmployeeService>();

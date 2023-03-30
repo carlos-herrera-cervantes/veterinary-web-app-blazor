@@ -3,8 +3,10 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Veterinary.Domain.Models;
+using Veterinary.Domain.Config;
 
 namespace Veterinary.Services.AuthServices;
 
@@ -16,14 +18,21 @@ public class AvatarService : IAvatarService
 
     private readonly ILocalStorageService _localStorage;
 
+    private readonly ILogger<AvatarService> _logger;
+
     #endregion
 
     #region snippet_Constructors
 
-    public AvatarService(IHttpClientFactory clientFactory, ILocalStorageService localStorage)
+    public AvatarService(
+        IHttpClientFactory clientFactory,
+        ILocalStorageService localStorage,
+        ILogger<AvatarService> logger
+    )
     {
         _httpClient = clientFactory.CreateClient("veterinary");
         _localStorage = localStorage;
+        _logger = logger;
     }
 
     #endregion
@@ -39,12 +48,31 @@ public class AvatarService : IAvatarService
 
         if (!httpResponse.IsSuccessStatusCode)
         {
-            return null;
+            _logger.LogWarning($"Imposible get avatar for current user with jwt: {jwt}");
+            return new Avatar { Path = AvatarConfig.NoProfilePicture };
         }
 
         var content = await httpResponse.Content.ReadAsStringAsync();
-            
-        return JsonConvert.DeserializeObject<Avatar>(content);
+        var avatar = JsonConvert.DeserializeObject<Avatar>(content);
+
+        try
+        {
+            using var avatarStatusResponse = await _httpClient.GetAsync(avatar.Path);
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                _logger.LogWarning($"Avatar not found for current user with jwt: {jwt}");
+                avatar.Path = AvatarConfig.NoProfilePicture;
+            }
+        }
+        catch (Exception e)
+        {
+            _logger.LogWarning($"Exception checking avatar for current user with jwt: {jwt}");
+            _logger.LogWarning(e.Message);
+            avatar.Path = AvatarConfig.NoProfilePicture;
+        }
+
+        return avatar;
     }
 
     public async Task<Avatar> GetByIdAsync(string id)
@@ -56,12 +84,30 @@ public class AvatarService : IAvatarService
 
         if (!httpResponse.IsSuccessStatusCode)
         {
-            return new Avatar{ Path = "" };
+            return new Avatar{ Path = AvatarConfig.NoProfilePicture };
         }
 
         var content = await httpResponse.Content.ReadAsStringAsync();
-            
-        return JsonConvert.DeserializeObject<Avatar>(content);
+        var avatar = JsonConvert.DeserializeObject<Avatar>(content);
+
+        try
+        {
+            using var avatarStatusResponse = await _httpClient.GetAsync(avatar.Path);
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                _logger.LogWarning($"Avatar not found user: {id}");
+                avatar.Path = AvatarConfig.NoProfilePicture;
+            }
+        }
+        catch (Exception e)
+        {
+            _logger.LogWarning($"Exception checking avatar for user: {id}");
+            _logger.LogWarning(e.Message);
+            avatar.Path = AvatarConfig.NoProfilePicture;
+        }
+
+        return avatar;
     }
 
     public async Task<Avatar> Upload(MultipartFormDataContent content)
