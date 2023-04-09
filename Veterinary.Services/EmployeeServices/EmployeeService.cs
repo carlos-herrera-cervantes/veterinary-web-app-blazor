@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Veterinary.Domain.Models;
 using Veterinary.Domain.Types;
+using Veterinary.Domain.Config;
 
 namespace Veterinary.Services.EmployeeServices;
 
@@ -45,7 +46,7 @@ public class EmployeeService : IEmployeeService
         var jwt = await _localStorage.GetItemAsync<string>("jwt");
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-        using var httpResponse = await _httpClient.GetAsync($"employees/profiles?offset={offset}&limit={limit}");
+        using var httpResponse = await _httpClient.GetAsync($"{ApiConfig.VeterinaryEmployeePathV1}/profiles?offset={offset}&limit={limit}");
 
         if (!httpResponse.IsSuccessStatusCode)
         {
@@ -62,11 +63,12 @@ public class EmployeeService : IEmployeeService
         var jwt = await _localStorage.GetItemAsync<string>("jwt");
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-        using var httpResponse = await _httpClient.GetAsync($"employees/profiles/me");
+        using var httpResponse = await _httpClient.GetAsync($"{ApiConfig.VeterinaryEmployeePathV1}/profiles/me");
 
         if (!httpResponse.IsSuccessStatusCode)
         {
-            return null;
+            _logger.LogWarning($"Imposible get employee detail. Status code: {httpResponse.StatusCode}");
+            return new EmployeeProfile();
         }
 
         var content = await httpResponse.Content.ReadAsStringAsync();
@@ -79,7 +81,7 @@ public class EmployeeService : IEmployeeService
         var jwt = await _localStorage.GetItemAsync<string>("jwt");
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-        using var httpResponse = await _httpClient.GetAsync($"employees/profiles/{id}");
+        using var httpResponse = await _httpClient.GetAsync($"{ApiConfig.VeterinaryEmployeePathV1}/profiles/{id}");
 
         if (!httpResponse.IsSuccessStatusCode)
         {
@@ -101,7 +103,7 @@ public class EmployeeService : IEmployeeService
         var jwt = await _localStorage.GetItemAsync<string>("jwt");
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-        using var httpResponse = await _httpClient.PatchAsync($"employees/profiles/{id}", employeeJson);
+        using var httpResponse = await _httpClient.PatchAsync($"{ApiConfig.VeterinaryEmployeePathV1}/profiles/{id}", employeeJson);
 
         if (!httpResponse.IsSuccessStatusCode)
         {
