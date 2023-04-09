@@ -9,8 +9,15 @@
     <PackageReference Include="Blazored.LocalStorage" Version="4.1.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Extensions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Web' " />
 </Project>

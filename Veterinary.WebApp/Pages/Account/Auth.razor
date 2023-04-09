@@ -4,23 +4,20 @@
 
 <div class="row">
     <div class="large-hight">
-        <h2 class="text-center">Authenticate</h2>
         <ErrorBoundary>
             <ChildContent>
-                <EditForm Model="credentials" OnValidSubmit="HandleSignIn">
+                <EditForm EditContext="editContext" OnValidSubmit="HandleSignIn">
                     <DataAnnotationsValidator />
-                    <ValidationSummary />
 
-                    <div id="auth-form" class="box small-width">
+                    <div id="auth-form" class="box-3 large-hight">
+                        <h2 class="text-center border-bottom-tiny padding-bottom-tiny">Authenticate</h2>
                         <div>
                             <label for="employee_number" class="form-label">Email</label>
-                            <InputText type="text" placeholder="direction@example.com" class="form-input" id="employee_number"
-                                       @bind-Value="credentials.Email" />
+                            <InputText type="text" placeholder="direction@example.com" class="form-input" id="employee_number" @bind-Value="credentials.Email" />
                         </div>
                         <div>
                             <label for="password" class="form-label">Password</label>
-                            <InputText type="password" placeholder="secret" class="form-input" id="password"
-                                       @bind-Value="credentials.Password" />
+                            <InputText type="password" placeholder="secret" class="form-input" id="password" @bind-Value="credentials.Password" />
                         </div>
                         <div class="content-center middle-width">
                             <button type="submit" class="form-button dark-background white-text">Submit</button>
@@ -35,7 +32,7 @@
             </ErrorContent>
         </ErrorBoundary>
     </div>
-    <div class="small-padding">
+    <div class="small-padding background-index">
         <h2><i class="fas fa-paw"></i>
             Welcome again. Don't forget to do a good job
         </h2>
@@ -43,11 +40,18 @@
             Acapulco Branch Office - Hospital Veterinary
         </h4>
     </div>
-    <img class="small-uniform-square bottom-right-corner" src="images/logo.png" alt="logo" />
 </div>
 
 @code {
     private Credentials credentials = new Credentials();
+
+    private EditContext editContext;
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(credentials);
+        editContext.SetFieldCssClassProvider(new CssExtensions());
+    }
 
     private async Task HandleSignIn()
     {

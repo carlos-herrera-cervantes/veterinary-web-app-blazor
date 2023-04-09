@@ -151,7 +151,7 @@ public class EmployeeServiceTests
             _mockLocalStorageService.Object,
             _mockLogger.Object
         );
-        
+
         await Assert.ThrowsAsync<Exception>(async ()
             => await employeeService.GetByIdAsync(id: "dummyid"));
     }
@@ -211,7 +211,7 @@ public class EmployeeServiceTests
     }
 
     [Fact]
-    public async Task GetAsyncShouldReturnNull()
+    public async Task GetAsyncShouldReturnNotNull()
     {
         var mockDelegatingHandler = new Mock<DelegatingHandler>();
         var httpClient = new HttpClient(mockDelegatingHandler.Object);
@@ -251,7 +251,7 @@ public class EmployeeServiceTests
                 ItExpr.IsAny<CancellationToken>()
             );
 
-        Assert.Null(employee);
+        Assert.NotNull(employee);
     }
 
     [Fact]

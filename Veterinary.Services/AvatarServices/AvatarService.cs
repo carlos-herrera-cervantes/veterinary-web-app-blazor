@@ -44,7 +44,7 @@ public class AvatarService : IAvatarService
         var jwt = await _localStorage.GetItemAsync<string>("jwt");
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-        using var httpResponse = await _httpClient.GetAsync($"employees/avatar/me");
+        using var httpResponse = await _httpClient.GetAsync($"{ApiConfig.VeterinaryEmployeePathV1}/avatar/me");
 
         if (!httpResponse.IsSuccessStatusCode)
         {
@@ -80,7 +80,7 @@ public class AvatarService : IAvatarService
         var jwt = await _localStorage.GetItemAsync<string>("jwt");
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-        using var httpResponse = await _httpClient.GetAsync($"employees/avatar/{id}");
+        using var httpResponse = await _httpClient.GetAsync($"{ApiConfig.VeterinaryEmployeePathV1}/avatar/{id}");
 
         if (!httpResponse.IsSuccessStatusCode)
         {
@@ -115,7 +115,7 @@ public class AvatarService : IAvatarService
         var jwt = await _localStorage.GetItemAsync<string>("jwt");
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-        using var httpResponse = await _httpClient.PostAsync($"employees/avatar/me", content);
+        using var httpResponse = await _httpClient.PostAsync($"{ApiConfig.VeterinaryEmployeePathV1}/avatar/me", content);
 
         if (!httpResponse.IsSuccessStatusCode)
         {

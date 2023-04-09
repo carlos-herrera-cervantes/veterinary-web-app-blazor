@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Veterinary.Domain.Models;
 using Veterinary.Domain.Types;
+using Veterinary.Domain.Config;
 
 namespace Veterinary.Services.AuthServices;
 
@@ -52,7 +53,7 @@ public class AuthService : IAuthService
             JsonConvert.SerializeObject(credentials), Encoding.UTF8, "application/json"
         );
 
-        using var httpResponse = await _httpClient.PostAsync("authentication/sign-in", credentialsJson);
+        using var httpResponse = await _httpClient.PostAsync($"{ApiConfig.VeterinaryAuthorizerPathV1}/sign-in", credentialsJson);
 
         if (!httpResponse.IsSuccessStatusCode)
         {
@@ -80,7 +81,7 @@ public class AuthService : IAuthService
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
         using var httpResponse = await _httpClient
-            .PostAsync("authentication/sign-up/employees", credentialsJson);
+            .PostAsync($"{ApiConfig.VeterinaryAuthorizerPathV1}/sign-up/employees", credentialsJson);
 
         if (!httpResponse.IsSuccessStatusCode)
         {
@@ -104,7 +105,7 @@ public class AuthService : IAuthService
         ((JwtAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsLoggedOut();
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-        using var httpResponse = await _httpClient.PostAsync("authentication/sign-out", null);
+        using var httpResponse = await _httpClient.PostAsync($"{ApiConfig.VeterinaryAuthorizerPathV1}/sign-out", null);
     }
 
     #endregion
