@@ -10,3 +10,12 @@ public class Avatar
     [JsonProperty("path")]
     public string Path { get; set; }
 }
+
+public class CustomerAvatar
+{
+    [JsonProperty("customer_id")]
+    public string CustomerId { get; set; }
+
+    [JsonProperty("path")]
+    public string Path { get; set; }
+}
