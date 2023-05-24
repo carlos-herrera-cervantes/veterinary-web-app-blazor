@@ -11,9 +11,13 @@
 
   <ItemGroup>
     <None Remove="Extensions\" />
+    <None Remove="Pages\Customer\" />
+    <None Remove="Pages\Customer\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Extensions\" />
+    <Folder Include="Pages\Customer\" />
+    <Folder Include="Pages\Customer\Shared\" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>

@@ -54,3 +54,33 @@ public class UpdateEmployeeProfileDto
     [JsonProperty("roles")]
     public List<string> Roles { get; set; }
 }
+
+public class CustomerProfile
+{
+    [JsonProperty("customer_id")]
+    public string CustomerId { get; set; }
+
+    [JsonProperty("name")]
+    public string Name { get; set; }
+
+    [JsonProperty("last_name")]
+    public string LastName { get; set; }
+
+    [JsonProperty("gender")]
+    public string Gender { get; set; }
+
+    [JsonProperty("phone_number")]
+    public string PhoneNumber { get; set; }
+
+    [JsonProperty("email")]
+    public string Email { get; set; }
+
+    [JsonProperty("birthday")]
+    public DateTime Birthday { get; set; }
+
+    [JsonProperty("created_at")]
+    public DateTime CreatedAt { get; set; }
+
+    [JsonProperty("updated_at")]
+    public DateTime UpdatedAt { get; set; }
+}

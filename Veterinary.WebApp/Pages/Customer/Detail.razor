@@ -1,0 +1,88 @@
+﻿@page "/customers/{id}"
+@attribute [Authorize]
+@inject ICustomerProfileService customerProfileService
+@inject NavigationManager navigationManager
+@inject ILogger<Detail> logger
+@inject ILocalStorageService localStorage
+@inject ICustomerAvatarService customerAvatarService
+
+<Header></Header>
+<div class="row">
+    <Nav></Nav>
+    <div>
+        <h2 class="text-center">Detail</h2>
+        @if (customerProfile is null)
+        {
+            <p><em>Loading....</em></p>
+        }
+        else
+        {
+            <ErrorBoundary>
+                <ChildContent>
+                    <EditForm Model="customerProfile">
+                        <div class="box-2 row-2 small-width">
+                            <div>
+                                <div class="text-center">
+                                    <img src="@avatarPath" alt="avatar" class="small-uniform-square medium-white-border" />
+                                </div>
+                                <div>
+                                    <label for="name" class="form-label">Name</label>
+                                    <InputText type="text" placeholder="name" class="form-input" id="name" readonly @bind-Value="customerProfile.Name" />
+                                </div>
+                                <div>
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <InputText type="text" placeholder="last name" class="form-input" id="lastName" readonly @bind-Value="customerProfile.LastName" />
+                                </div>
+                                <div>
+                                    <label for="gender" class="form-label">Gender</label>
+                                    <InputText type="text" placeholder="last name" class="form-input" id="gender" readonly @bind-Value="customerProfile.Gender" />
+                                </div>
+                                <div>
+                                    <label for="phoneNumber" class="form-label">Phone Number</label>
+                                    <InputText type="text" placeholder="phone number" class="form-input" id="phoneNumber" readonly @bind-Value="customerProfile.PhoneNumber" />
+                                </div>
+                                <div>
+                                    <label for="birthdate" class="form-label">Birthday</label>
+                                    <input type="text" placeholder="birthday" class="form-input" id="birthdate" readonly @bind="customerProfile.Birthday" />
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <label for="created_at" class="form-label">Created At</label>
+                                    <input type="text" readonly placeholder="created at" class="form-input" id="created_at" @bind="customerProfile.CreatedAt" />
+                                </div>
+                                <div>
+                                    <label for="updated_at" class="form-label">Updated At</label>
+                                    <input type="text" readonly placeholder="updated at" class="form-input" id="updated_at" @bind="customerProfile.UpdatedAt" />
+                                </div>
+                            </div>
+                        </div>
+                    </EditForm>
+                </ChildContent>
+                <ErrorContent Context="ex">
+                    <div class="box-error">
+                        <p>@ex.Message</p>
+                    </div>
+                </ErrorContent>
+            </ErrorBoundary>
+        }
+    </div>
+</div>
+
+@code {
+    private CustomerProfile customerProfile;
+
+    private string avatarPath;
+
+    [Parameter]
+    public string Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var avatar = await customerAvatarService.GetByIdAsync(Id);
+        avatarPath = avatar.Path;
+
+        customerProfile = await customerProfileService.GetByIdAsync(Id);
+        await base.OnInitializedAsync();
+    }
+}

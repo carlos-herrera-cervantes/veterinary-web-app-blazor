@@ -1,14 +1,14 @@
-@page "/employees"
+﻿@page "/customers"
 @attribute [Authorize]
-@inject IEmployeeService employeeService
+@inject ICustomerProfileService customerProfileService
 
-<Header></Header>
+<CustomerHeader></CustomerHeader>
 <div class="row">
     <Nav></Nav>
     <div>
-        <h2 class="text-center">Employees</h2>
+        <h2 class="text-center">Customers</h2>
         <div class="box-2 small-width">
-            @if (employees is null)
+            @if (customers is null)
             {
                 <Loader></Loader>
             }
@@ -25,7 +25,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (employees.Data.Count() == 0)
+                                @if (customers.Data.Count() == 0)
                                 {
                                     <tr>
                                         <td colspan="3">No data</td>
@@ -33,14 +33,14 @@
                                 }
                                 else
                                 {
-                                    foreach (var employee in employees.Data)
+                                    foreach (var customer in customers.Data)
                                     {
                                         <tr>
-                                            <td>@employee.Email</td>
-                                            <td>@employee.Name</td>
-                                            <td>@employee.LastName</td>
+                                            <td>@customer.Email</td>
+                                            <td>@customer.Name</td>
+                                            <td>@customer.LastName</td>
                                             <td>
-                                                <NavLink href="@($"/employees/{employee.EmployeeId}")">
+                                                <NavLink href="@($"/customers/{customer.CustomerId}")">
                                                     <i class="fa fa-info-circle"></i> Detail
                                                 </NavLink>
                                             </td>
@@ -62,11 +62,11 @@
 </div>
 
 @code {
-    private HttpListResponse<EmployeeProfile> employees;
+    private HttpListResponse<CustomerProfile> customers;
 
     protected override async Task OnInitializedAsync()
     {
-        employees = await employeeService.GetAllAsync(0, 10);
+        customers = await customerProfileService.GetAllAsync(0, 10);
         await base.OnInitializedAsync();
     }
 }
