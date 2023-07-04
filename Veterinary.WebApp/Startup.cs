@@ -9,6 +9,7 @@ using Veterinary.Services.AuthServices;
 using Veterinary.Services.EmployeeServices;
 using Veterinary.Domain.Config;
 using Veterinary.Services.CustomerServices;
+using Veterinary.Services.PetServices;
 
 namespace Veterinary.WebApp;
 
@@ -30,6 +31,7 @@ public class Startup
         services.AddTransient<IAvatarService, AvatarService>();
         services.AddTransient<ICustomerProfileService, CustomerProfileService>();
         services.AddTransient<ICustomerAvatarService, CustomerAvatarService>();
+        services.AddTransient<IPetProfileService, PetProfileService>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

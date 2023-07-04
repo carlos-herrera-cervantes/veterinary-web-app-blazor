@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Blazored.LocalStorage;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -50,7 +51,11 @@ public class EmployeeService : IEmployeeService
 
         if (!httpResponse.IsSuccessStatusCode)
         {
-            throw new Exception($"Impossible list employees. Status code: {httpResponse.StatusCode}");
+            _logger.LogWarning($"Impossible list employees. Status code: {httpResponse.StatusCode}");
+            return new HttpListResponse<EmployeeProfile>
+            {
+                Data = new List<EmployeeProfile>()
+            };
         }
 
         var content = await httpResponse.Content.ReadAsStringAsync();

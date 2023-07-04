@@ -1,0 +1,73 @@
+@page "/customers/{customerId}/pets/{petId}"
+@attribute [Authorize]
+@inject IPetProfileService petProfileService
+
+<PetHeader></PetHeader>
+<div class="row">
+    <Nav></Nav>
+    <div>
+        <h2 class="text-center">Pet - Detail</h2>
+        @if (petProfile is null)
+        {
+            <Loader></Loader>
+        }
+        else
+        {
+            <ErrorBoundary>
+                <ChildContent>
+                    <EditForm Model="petProfile">
+                        <div class="box-2 row-2 small-width">
+                            <div>
+                                <div>
+                                    <label for="pet-name" class="form-label">Name</label>
+                                    <InputText type="text" placeholder="name" class="form-input" id="pet-name" readonly @bind-Value="petProfile.Name" />
+                                </div>
+                                <div>
+                                    <label for="pet-color" class="form-label">Color</label>
+                                    <InputText type="text" placeholder="color" class="form-input" id="pet-color" readonly @bind-Value="petProfile.Color" />
+                                </div>
+                                <div>
+                                    <label for="pet-gender" class="form-label">Gender</label>
+                                    <InputText type="text" placeholder="gender" class="form-input" id="pet-gender" readonly @bind-Value="petProfile.Gender" />
+                                </div>
+                                <div>
+                                    <label for="pet-birthday" class="form-label">Birthday</label>
+                                    <input type="text" placeholder="birthday" class="form-input" id="pet-birthday" readonly @bind="petProfile.Birthday" />
+                                </div>
+                                <div>
+                                    <label for="pet-created_at" class="form-label">Created At</label>
+                                    <input type="text" placeholder="created at" class="form-input" id="pet-created_at" readonly @bind="petProfile.CreatedAt" />
+                                </div>
+                                <div>
+                                    <label for="pet-updated_at" class="form-label">Updated At</label>
+                                    <input type="text" placeholder="updated at" class="form-input" id="pet-updated_at" readonly @bind="petProfile.UpdatedAt" />
+                                </div>
+                            </div>
+                        </div>
+                    </EditForm>
+                </ChildContent>
+                <ErrorContent Context="ex">
+                    <div class="box-error">
+                        <p>@ex.Message</p>
+                    </div>
+                </ErrorContent>
+            </ErrorBoundary>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string CustomerId { get; set;}
+
+    [Parameter]
+    public string PetId { get; set;}
+
+    private PetProfile petProfile;
+
+    protected override async Task OnInitializedAsync()
+    {
+        petProfile = await petProfileService.GetByIdAsync(PetId);
+        await base.OnInitializedAsync();
+    }
+}

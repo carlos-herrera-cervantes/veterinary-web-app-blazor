@@ -13,11 +13,13 @@
     <None Remove="Extensions\" />
     <None Remove="Pages\Customer\" />
     <None Remove="Pages\Customer\Shared\" />
+    <None Remove="Pages\Pet\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Extensions\" />
     <Folder Include="Pages\Customer\" />
     <Folder Include="Pages\Customer\Shared\" />
+    <Folder Include="Pages\Pet\Shared\" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>

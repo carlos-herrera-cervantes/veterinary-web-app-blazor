@@ -67,9 +67,9 @@ public class EmployeeServiceTests
             _mockLocalStorageService.Object,
             _mockLogger.Object
         );
+        var employees = await employeeService.GetAllAsync(offset: 0, limit: 10);
 
-        await Assert.ThrowsAsync<Exception>(async ()
-            => await employeeService.GetAllAsync(offset: 0, limit: 10));
+        Assert.Empty(employees.Data);
     }
 
     [Fact]
