@@ -1,23 +1,23 @@
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System;
-using System.Net;
 using System.Threading;
+using System.Net;
 using System.Collections.Generic;
-using Blazored.LocalStorage;
 using Microsoft.Extensions.Logging;
+using Blazored.LocalStorage;
 using Xunit;
-using Newtonsoft.Json;
 using Moq;
 using Moq.Protected;
+using Newtonsoft.Json;
+using Veterinary.Services.PetServices;
 using Veterinary.Domain.Models;
-using Veterinary.Services.CustomerServices;
 using Veterinary.Domain.Types;
 
-namespace Veterinary.Tests.Services.CustomerServices;
+namespace Veterinary.Tests.Services.PetServices;
 
-[Collection(nameof(CustomerProfileService))]
-public class CustomerProfileServiceTests
+[Collection(nameof(PetProfileService))]
+public class PetProfileServiceTests
 {
     #region snippet_Properties
 
@@ -25,25 +25,25 @@ public class CustomerProfileServiceTests
 
     private readonly Mock<ILocalStorageService> _mockLocalStorageService;
 
-    private readonly Mock<ILogger<CustomerProfileService>> _mockLogger;
+    private readonly Mock<ILogger<PetProfileService>> _mockLogger;
 
     #endregion
 
     #region snippet_Constructors
 
-    public CustomerProfileServiceTests()
+    public PetProfileServiceTests()
     {
         _mockHttpClientFactory = new Mock<IHttpClientFactory>();
         _mockLocalStorageService = new Mock<ILocalStorageService>();
-        _mockLogger = new Mock<ILogger<CustomerProfileService>>();
+        _mockLogger = new Mock<ILogger<PetProfileService>>();
     }
 
     #endregion
 
     #region snippet_Tests
 
-    [Fact(DisplayName = "Should return en empty response when request fails")]
-    public async Task GetAllAsyncShouldReturnEmptyResponse()
+    [Fact(DisplayName = "Should return empty data when request fails")]
+    public async Task GetByCustomerIdAsyncShouldReturnEmptyData()
     {
         var mockDelegatingHandler = new Mock<DelegatingHandler>();
         var httpClient = new HttpClient(mockDelegatingHandler.Object);
@@ -64,18 +64,18 @@ public class CustomerProfileServiceTests
             .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.InternalServerError))
             .Verifiable();
 
-        var customerProfileService = new CustomerProfileService(
+        var petProfileService = new PetProfileService(
             _mockHttpClientFactory.Object,
             _mockLocalStorageService.Object,
             _mockLogger.Object
         );
-        HttpListResponse<CustomerProfile> profiles = await customerProfileService.GetAllAsync(offset: 0, limit: 10);
+        var httpListResponse = await petProfileService.GetByCustomerIdAsync("dummy-id");
 
-        Assert.Empty(profiles.Data);
+        Assert.Empty(httpListResponse.Data);
     }
 
-    [Fact(DisplayName = "Should return data when request is successful")]
-    public async Task GetAllAsyncShouldReturnData()
+    [Fact(DisplayName = "Should return data when request succeeds")]
+    public async Task GetByCustomerIdAsyncShouldReturnData()
     {
         var mockDelegatingHandler = new Mock<DelegatingHandler>();
         var httpClient = new HttpClient(mockDelegatingHandler.Object);
@@ -86,16 +86,15 @@ public class CustomerProfileServiceTests
             .Returns(httpClient)
             .Verifiable();
 
-        var dummyProfileList = new List<CustomerProfile>
+        var dummyProfileList = new List<PetProfile>
         {
-            new CustomerProfile
+            new PetProfile
             {
                 CustomerId = "645ee8e20813510c2a14d7f7",
-                Name = "User",
-                LastName = "Example"
+                Name = "Antionio"
             }
         };
-        var dummyContent = JsonConvert.SerializeObject(new HttpListResponse<CustomerProfile>
+        var dummyContent = JsonConvert.SerializeObject(new HttpListResponse<PetProfile>
         {
             Data = dummyProfileList
         });
@@ -115,18 +114,18 @@ public class CustomerProfileServiceTests
             })
             .Verifiable();
 
-        var customerProfileService = new CustomerProfileService(
+        var petProfileService = new PetProfileService(
             _mockHttpClientFactory.Object,
             _mockLocalStorageService.Object,
             _mockLogger.Object
         );
-        HttpListResponse<CustomerProfile> profiles = await customerProfileService.GetAllAsync(offset: 0, limit: 10);
+        var httpListResponse = await petProfileService.GetByCustomerIdAsync("dummy-id");
 
-        Assert.NotEmpty(profiles.Data);
+        Assert.NotEmpty(httpListResponse.Data);
     }
 
-    [Fact(DisplayName = "Should return an empty profile when request fails")]
-    public async Task GetByIdAsyncShouldReturnEmptyResponse()
+    [Fact(DisplayName = "Should return empty profile when request fails")]
+    public async Task GetByIdAsyncShouldReturnEmptyProfile()
     {
         var mockDelegatingHandler = new Mock<DelegatingHandler>();
         var httpClient = new HttpClient(mockDelegatingHandler.Object);
@@ -147,17 +146,17 @@ public class CustomerProfileServiceTests
             .ReturnsAsync(new HttpResponseMessage(HttpStatusCode.InternalServerError))
             .Verifiable();
 
-        var customerProfileService = new CustomerProfileService(
+        var petProfileService = new PetProfileService(
             _mockHttpClientFactory.Object,
             _mockLocalStorageService.Object,
             _mockLogger.Object
         );
-        CustomerProfile profile = await customerProfileService.GetByIdAsync(id: "6460e990f0483254f96089fa");
+        var profile = await petProfileService.GetByIdAsync("dummy-id");
 
         Assert.Null(profile.Name);
     }
 
-    [Fact(DisplayName = "Should return customer profile when request is successful")]
+    [Fact(DisplayName = "Should return profile when request succeeds")]
     public async Task GetByIdAsyncShouldReturnProfile()
     {
         var mockDelegatingHandler = new Mock<DelegatingHandler>();
@@ -169,13 +168,11 @@ public class CustomerProfileServiceTests
             .Returns(httpClient)
             .Verifiable();
 
-        var dummyProfile = new CustomerProfile
+        var dummyContent = JsonConvert.SerializeObject(new PetProfile
         {
             CustomerId = "645ee8e20813510c2a14d7f7",
-            Name = "User",
-            LastName = "Example"
-        };
-        var dummyContent = JsonConvert.SerializeObject(dummyProfile);
+            Name = "Antionio"
+        });
 
         mockDelegatingHandler
             .Protected()
@@ -192,14 +189,14 @@ public class CustomerProfileServiceTests
             })
             .Verifiable();
 
-        var customerProfileService = new CustomerProfileService(
+        var petProfileService = new PetProfileService(
             _mockHttpClientFactory.Object,
             _mockLocalStorageService.Object,
             _mockLogger.Object
         );
-        CustomerProfile profile = await customerProfileService.GetByIdAsync(id: "645ee8e20813510c2a14d7f7");
+        var profile = await petProfileService.GetByIdAsync("dummy-id");
 
-        Assert.NotNull(profile.Name);
+        Assert.NotEmpty(profile.Name);
     }
 
     #endregion

@@ -12,9 +12,11 @@
 
   <ItemGroup>
     <None Remove="CustomerServices\" />
+    <None Remove="PetServices\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CustomerServices\" />
+    <Folder Include="PetServices\" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>

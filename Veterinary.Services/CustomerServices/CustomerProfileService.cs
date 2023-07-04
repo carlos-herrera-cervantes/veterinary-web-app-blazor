@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Blazored.LocalStorage;
@@ -49,7 +50,10 @@ public class CustomerProfileService : ICustomerProfileService
         if (!httpResponse.IsSuccessStatusCode)
         {
             _logger.LogWarning($"Imposible list customers. Status code: {httpResponse.StatusCode}");
-            return new HttpListResponse<CustomerProfile>();
+            return new HttpListResponse<CustomerProfile>
+            {
+                Data = new List<CustomerProfile>()
+            };
         }
 
         var content = await httpResponse.Content.ReadAsStringAsync();

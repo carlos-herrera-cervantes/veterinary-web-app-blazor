@@ -1,0 +1,72 @@
+﻿@page "/pets"
+@attribute [Authorize]
+@inject IPetProfileService petProfileService
+
+<PetHeader></PetHeader>
+<div class="row">
+    <Nav></Nav>
+    <div>
+        <h2 class="text-center">Pets</h2>
+        <div class="box-2 small-width">
+            @if (pets is null)
+            {
+                <Loader></Loader>
+            }
+            else
+            {
+                <ErrorBoundary>
+                    <ChildContent>
+                        <table class="fl-table">
+                            <thead>
+                                <tr>
+                                    <th>Customer ID</th>
+                                    <th>Name</th>
+                                    <th>Gender</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (pets.Data.Count() == 0)
+                                {
+                                    <tr>
+                                        <td colspan="3">No data</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    foreach (var pet in pets.Data)
+                                    {
+                                        <tr>
+                                            <td>@pet.CustomerId</td>
+                                            <td>@pet.Name</td>
+                                            <td>@pet.Gender</td>
+                                            <td>
+                                                <NavLink href="@($"/customers/{pet.CustomerId}/pets/{pet.Id}")">
+                                                    <i class="fa fa-info-circle"></i> Detail
+                                                </NavLink>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </ChildContent>
+                    <ErrorContent Context="ex">
+                        <div class="box-error">
+                            <p>@ex.Message</p>
+                        </div>
+                    </ErrorContent>
+                </ErrorBoundary>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private HttpListResponse<PetProfile> pets;
+
+    protected override async Task OnInitializedAsync()
+    {
+        pets = await petProfileService.GetAllAsync();
+        await base.OnInitializedAsync();
+    }
+}
